@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <!--basic user info-->
+  <form method="post">
+    <!--Make the drop menu for the user_type-->
+    <div class="user_credentials"
+      <label for="email">E-mail</label>
+      <input name="email" value="{email}" required>
+      <label for="password">Password</label>
+      <input type="password" name="password" value="{password}" required>
+      <br/>
+      <label for="first_name">First Name</label>
+      <input name="first_name" value="{first_name}" required>
+      <label for="middle_name">Middle Name</label>
+      <input name="middle_name" value="{middle_name}" required>
+      <label for="last_name">Last Name</label>
+      <input name="last_name" value="{last_name}" required>
+      <label for="birthdate">Birth date</label>
+      <input name="birthdate" value="{birthdate}" required>
+      <br/>
+    </div>
+    {% if user_type == 'Viewer' %}
+    <div id="viewer_credentials">
+    <label for="working_place_name">Working Place Name</label>
+    <input name="working_palce_name" value="{working_place_name}">
+    <label for="working_place_type">Working Place Type</label>
+    <input name="working_place_type" value="{working_place_type}">
+    <label for="working_place_description">Working Place Description</label>
+    <input name="working_place_description" value="{working_place_description}">
+    <br/>
+    </div>
+    {%endif%}
+    {% if user_type == 'contributor' %}
+    <div class="contributor">
+      <label for="specialization">Specilization</label>
+      <input name="specilization" value="{specilization}">
+      <label for="portfolio_link">Portfolio Link</label>
+      <input name="portfolio_link" value="{portfolio_link}">
+      <label for="years_experience">Years Of Experience</label>
+      <input name="years_experience" value="{years_experience}">
+    </div>
+    {% endif %}
+    {% if user_type == 'staff' %}
+    <div class="staff">
+      <label for="hire_date">Hire Date</label>
+      <input name="hire_date" value="{hire_date}">
+      <label for="working_hours">working Hours</label>
+      <input name="working_hours" value="{working_hours}">
+      <label for="payment_rate">Payment Rate</label>
+      <input name="payment_rate" value="{payment_rate}">
+    </div>
+    {% endif %}
+    <div class="submit-button">
+      <input type="submit" value="Save Changes">
+    </div>
+  </form>
+{% endblock %}

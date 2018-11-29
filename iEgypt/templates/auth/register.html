@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+{% block content %}
+  <form method="post">
+    <div class="form-group">
+      <label for="user-type"> User Type</label>
+      <select class="form-control">
+        <option>Viewer</option>
+        <option>Contributor</option>
+        <option>Authorized Reviewer</option>
+        <option>Content Manager</option>
+      </select>
+    </div>
+    <div class="user_credentials">
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input name="first_name" required>
+      </div>
+      <div class="form-group">
+        <label for="middle_name">Middle Name</label>
+        <input name="middle_name" required>
+      </div>
+      <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input name="last_name" required>
+      </div>
+      <div class="form-group">
+        <label for="birthdate">Birth date</label>
+        <input name="birthdate" required>
+      </div>
+    </div>
+
+    <div id="viewer_credentials">
+      <div class="form-group">
+        <label for="working_place_name">Working Place Name</label>
+        <input name="working_palce_name">
+      </div>
+    <div class="form-group">
+      <label for="working_place_type">Working Place Type</label>
+      <input name="working_place_type">
+    </div>
+    <div class="form-group">
+      <label for="working_place_description">Working Place Description</label>
+      <input name="working_place_description">
+    </div>
+    </div>
+
+    <div class="contributor">
+      <div class="form-group">
+        <label for="specialization">Specilization</label>
+        <input name="specilization">
+      </div>
+      <div class="form-group">
+        <label for="portfolio_link">Portfolio Link</label>
+        <input name="portfolio_link">
+      </div>
+      <div class="form-group">
+        <label for="years_experience">Years Of Experience</label>
+        <input name="years_experience">
+      </div>
+    </div>
+
+    <div class="staff">
+      <div class="form-group">
+        <label for="hire_date">Hire Date</label>
+        <input name="hire_date">
+      </div>
+      <div class="form-group">
+        <label for="working_hours">working Hours</label>
+        <input name="working_hours">
+      </div>
+      <div class="form-group">
+        <label for="payment_rate">Payment Rate</label>
+        <input name="payment_rate">
+      </div>
+    </div>
+
+    <input type="submit" value="Register">
+  </form>
+{%  endblock %}
+<!--Add post request script-->
+{% block script %}{% endblock %}

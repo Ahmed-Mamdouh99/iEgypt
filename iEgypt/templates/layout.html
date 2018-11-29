@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} · iEgypt</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='content/bootstrap.min.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='content/site.css')}}" />
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="/" class="navbar-brand">iEgypt</a>
+            </div>
+            <div class="navbar ">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('user.home') }}">Home</a></li>
+                    {% if logged_in%}
+                      <!--Add the show profile thingy-->
+                      <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    {% else %}
+                      <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                      <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        {% block content %}{% endblock %}
+        <hr />
+    </div>
+
+    <script src="{{url_for('static', filename='scripts/bootstrap.js')}}"></script>
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>

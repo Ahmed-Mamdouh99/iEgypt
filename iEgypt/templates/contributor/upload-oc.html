@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<form method="post">
+  <label for"type_id">Type ID</label>
+  <input name="type_id" required>
+
+  <label for"subcategory_name"> Subcategory Name</label>
+  <input name="subcategory_name" required>
+
+  <label for"category_id"></label>
+  <input name="category_id" required>
+
+  <label for"link"></label>
+  <input name="link" required>
+
+  <input type="submit" value="Log In">
+</form>
+{% endblock %}
