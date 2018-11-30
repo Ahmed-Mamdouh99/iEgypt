@@ -1,9 +1,21 @@
 import pyodbc
+from iEgypt.config import config
+
+
+#Connection string for the database
+connection_string = 'DRIVER={SQL Server};' +
+'SERVER={server};DATABASE={database};UID={uname};PWD={passwd}'.format(
+    server=config.get('db_server'),
+    database=config.get('db_name'),
+    uname=config.get('db_username'),
+    passwd=config.get('db_password')
+    )
+
 
 def get_conn():
     """Return a new connection"""
-    pass
-
+    conn = pyodbc.connect(connection_string)
+    return conn
 
 def get_user(email, password): #Takes in a request object r
     """ Returns a user id or -1 """
@@ -15,8 +27,9 @@ def get_user(email, password): #Takes in a request object r
     sql.format(email=email, password=password)
     # Query the database
     with get_conn() as conn:
-        conn.execute(sql)
-        row = conn.fetchone()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        row = cursor.fetchone()
         try:
             return int(row[0])
         except Exception:
@@ -54,8 +67,9 @@ def register_user(params):
     sql.format(**params)
     # Executing the query
     with get_conn() as conn:
-        conn.execute(sql)
-        row = conn.fetchone()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        row = cursor.fetchone()
         try:
             return int(row[0])
         except Exception:
@@ -66,8 +80,9 @@ def user_search_og(type='NULL', cat='NULL'):
     """Return the result from proc Search_Original_Content"""
     sql = 'EXEC Original_Content_Search {type}, {category};'.format(type=type, category=cat)
     with get_conn() as conn:
-        conn.exec(sql)
-        row = conn.fetchone()
+        cursor = conn.cursor()
+        cursor.exec(sql)
+        row = cursor.fetchone()
         return row
 
 def user_search_contributor(fullname):
@@ -75,8 +90,9 @@ def user_search_contributor(fullname):
     sql = 'EXEC Contributor_Search {fullname}'
     sql.format(fullname=fullname)
     with get_conn() as conn:
-        conn.execute(sql)
-        rows = conn.fetchall()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        rows = cursor.fetchall()
         res = []
         for row in rows:
             res += [row]
@@ -96,8 +112,9 @@ def get_user_type(user_id):
         SELECT @user_type AS output
         """
     with get_conn() as conn:
-        conn.execute(sql)
-        row = conn.fetchone()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        row = cursor.fetchone()
         type = row[0]
         if row[0] in ('Viewer', 'Contributor', 'Staff'):
             return row[0]
@@ -116,8 +133,9 @@ def edit_user(params):
     sql.format(**params)
     # Executing the query
     with get_conn() as conn:
-        conn.execute(sql)
-        rows = conn.fetchall()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        rows = cursor.fetchall()
         res = []
         for row in rows:
             res += [row]
@@ -147,8 +165,9 @@ def get_profile(user_id):
         """
     sql.format(user_id=user_id)
     with get_conn() as conn:
-        conn.execute(sql)
-        row = conn.fetchone()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        row = cursor.fetchone()
         return row
 
 ###################################

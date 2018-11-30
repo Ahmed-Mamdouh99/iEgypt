@@ -1,0 +1,8 @@
+# Server config
+hostname: localhost
+port: 3000
+
+# DB config
+db_server: Express
+db_username: SA
+db_password: Password1
