@@ -10,7 +10,7 @@ def get_user(email, password): #Takes in a request object r
     sql = """\
             DECLARE @user_id INTEGER;
             EXEC User_login {email}, {password}, @user_id OUT;
-            SELECT @out AS the_output;\
+            SELECT @out AS output;\
         """
     sql.format(email=email, password=password)
     # Query the database
@@ -49,7 +49,7 @@ def register_user(params):
             '{working_place_type}', '{working_place_description}', '{specilization}', \
             '{portfolio_link}', {years_experience}, '{hire_date}', {working_hours}, \
             {payment_rate}, @user_id OUT;
-            SELECT @user_id AS the_output;\
+            SELECT @user_id AS output;\
         """
     sql.format(**params)
     # Executing the query
@@ -64,22 +64,43 @@ def register_user(params):
 
 def user_search_og(type='NULL', cat='NULL'):
     """Return the result from proc Search_Original_Content"""
-    if type == 'NULL' and cat == 'NULL':
-        # TODO - TBD
-        pass
     sql = 'EXEC Original_Content_Search {type}, {category};'.format(type=type, category=cat)
     with get_conn() as conn:
         conn.exec(sql)
         row = conn.fetchone()
-        #TODO - finish this
+        return row
 
-def user_search_contributor(name):
-    # TODO - TBD
-    pass
+def user_search_contributor(fullname):
+    """Return the result from prom Contributor_Search"""
+    sql = 'EXEC Contributor_Search {fullname}'
+    sql.format(fullname=fullname)
+    with get_conn() as conn:
+        conn.execute(sql)
+        rows = conn.fetchall()
+        res = []
+        for row in rows:
+            res += [row]
+        return res
 
 def get_user_type(user_id):
-    # TODO - TBD
-    pass
+    """Returns the user type of a user in the database or None if the user is not found"""
+    sql = """
+        DECLARE @user_type VARCHAR(255) = '-1'
+        DECLATE @user_id INTEGER = {user_id}
+        IF EXISTS (SELECT * FROM [Viewer] WHERE ID=@user_id)
+            SET @user_type = 'Viewer'
+        ELSE IF EXISTS (SELECT * FROM [Contributor] WHERE ID=@user_id)
+            SET @user_type = 'Contributor'
+        ELSE IF EXISTS (SELECT * FROM [Staff] WHERE ID=@user_id)
+            SET @user_type = 'Staff'
+        SELECT @user_type AS output
+        """
+    with get_conn() as conn:
+        conn.execute(sql)
+        row = conn.fetchone()
+        type = row[0]
+        if row[0] in ('Viewer', 'Contributor', 'Staff'):
+            return row[0]
 
 def edit_user(params):
     if validate_profile_params:
@@ -96,9 +117,15 @@ def edit_user(params):
     # Executing the query
     with get_conn() as conn:
         conn.execute(sql)
+        rows = conn.fetchall()
+        res = []
+        for row in rows:
+            res += [row]
+        return res
 
 
 def get_profile(user_id):
+    """Returns the result of proc Show_Profile"""
     sql = """\
             DECLARE @email VARCHAR(255), @password VARCHAR(255), @first_name VARCHAR(255), \
             @middle_name VARCHAR(255), @last_name VARCHAR(255), @birth_date DATETIME, \
@@ -121,6 +148,7 @@ def get_profile(user_id):
     sql.format(user_id=user_id)
     with get_conn() as conn:
         conn.execute(sql)
-        #TODO - Go on
+        row = conn.fetchone()
+        return row
 
 ###################################
