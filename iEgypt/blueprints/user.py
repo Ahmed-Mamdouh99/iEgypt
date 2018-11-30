@@ -21,13 +21,13 @@ def home():
     return load_template('user/home.html', title='Home')
 
 
-@bp.route('/oc-search', method=('GET', 'POST'))
+@bp.route('/oc-search', methods=('GET', 'POST'))
 def original_content_search():
     """Renders the page to search for original content"""
     return load_template('user/oc-search.html', title='Search Original Content')
 
 
-@bp.route('/contributor-search', method=('GET', 'POST'))
+@bp.route('/contributor-search', methods=('GET', 'POST'))
 def contributor_search():
     """Renders the page to search for contributors"""
     return load_template('user/contributor-search.html', title='Search Contributor')
