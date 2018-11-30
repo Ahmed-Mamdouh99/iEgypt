@@ -2,19 +2,18 @@ import pyodbc
 from iEgypt.config import config
 
 
-#Connection string for the database
-connection_string = 'DRIVER={SQL Server};' +
-'SERVER={server};DATABASE={database};UID={uname};PWD={passwd}'.format(
-    server=config.get('db_server'),
-    database=config.get('db_name'),
-    uname=config.get('db_username'),
-    passwd=config.get('db_password')
-    )
-
-
 def get_conn():
+
     """Return a new connection"""
-    conn = pyodbc.connect(connection_string)
+    params = dict()
+    params['server'] = config.get('db_server')
+    params['database'] = config.get('db_name')
+    params['uname'] = config.get('db_username')
+    params['passwd'] = config.get('db_password')
+    params['driver'] = config.get('db_driver')
+    params['port'] = config.get('db_port')
+    conn = pyodbc.connect('DRIVER={driver};SERVER={server};PORT={port};\
+    DATABASE={database};UID={uname};PWD={passwd}'.format(**params))
     return conn
 
 def get_user(email, password): #Takes in a request object r

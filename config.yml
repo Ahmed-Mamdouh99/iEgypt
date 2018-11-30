@@ -5,4 +5,7 @@ port: 3000
 # DB config
 db_server: Express
 db_username: SA
+db_name: IEgypt_78
 db_password: Password1
+db_port: 1433
+db_driver: {ODBC Driver 17 for SQL Server}

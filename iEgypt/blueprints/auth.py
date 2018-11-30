@@ -54,7 +54,9 @@ def load_logged_in_user():
 def login():
     """Log in a registered user by adding the user id to the session."""
     if request.method == 'POST':
-        user_id = get_user(request.form)
+        email = request.form['email']
+        password = request.form['password']
+        user_id = get_user(email, password)
         if user == -1:
             error = 'Incorrect login.'
         else:
