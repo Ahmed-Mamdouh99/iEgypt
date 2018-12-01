@@ -32,10 +32,10 @@ GO
 
 CREATE OR ALTER PROC Contributor_Search(@fullname VARCHAR(255)) AS
   BEGIN
-    SELECT u.ID, u.first_name, u.middle_name, u.last_name, u.age, c.years_of_experience, c.portfolio_link, c.specialization
+    SELECT u.ID, (u.first_name+' '+u.middle_name+' '+u.last_name) AS 'Full Name', u.age, c.years_of_experience, c.portfolio_link, c.specialization
     FROM [User] u JOIN
          [Contributor] c ON u.ID = c.ID
-    WHERE (u.ID = c.ID AND (u.first_name + ' ' + u.middle_name +' ' + u.last_name) LIKE '%' + @fullname + '%');
+    WHERE (u.ID = c.ID AND (u.first_name+' '+u.middle_name+' '+u.last_name) LIKE '%'+@fullname+'%');
   END
 GO
 
@@ -123,8 +123,8 @@ GO
 CREATE OR ALTER PROC Order_Contributor
 AS
   BEGIN
-    SELECT ID, years_of_experience
-    FROM [Contributor]
+    SELECT u.ID, (u.first_name+' '+u.middle_name+' '+u.last_name) AS 'Full name', c.years_of_experience, c.specialization, c.portfolio_link
+    FROM [Contributor] c JOIN [User] u ON c.ID=u.ID
     ORDER BY years_of_experience DESC;
   END
 GO
@@ -135,9 +135,9 @@ AS
     IF @contributor_id IS NULL
       BEGIN
         SELECT cr.ID,
-               u.first_name,
-               u.middle_name,
-               u.last_name,
+               (u.first_name+' '+
+               u.middle_name+' '+
+               u.last_name) AS 'Full name',
                u.email,
                u.birth_date,
                u.age,
@@ -147,7 +147,7 @@ AS
                ct.ID,
                ct.category_type,
                ct.subcategory_name,
-               ct.uploaded_at,
+               YEAR(ct.uploaded_at) AS uploaded_at,
                oc.rating
         FROM [User] u
                JOIN [Contributor] cr ON u.ID = cr.ID

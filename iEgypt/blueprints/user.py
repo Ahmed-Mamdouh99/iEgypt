@@ -2,11 +2,12 @@
 Routes and views for the flask application.
 """
 from flask import (
-    Blueprint, session, redirect, url_for, request
+    Blueprint, session, redirect, url_for, request, flash
 )
 from iEgypt.model.overloaded import load_template
 from iEgypt.model.db.user_model import(
-    user_search_oc, user_search_contributor, user_show_contributors
+    user_search_oc, user_search_contributor, user_show_contributors,
+    user_show_oc
 )
 
 
@@ -27,7 +28,8 @@ def home():
 @bp.route('/oc-search', methods=('GET', 'POST'))
 def oc_search():
     """Renders the page to search for original content"""
-    col_names = ['Content ID', 'Contributor ID', 'Category', 'Subcategory', 'Type', 'Link', 'Rating']
+    col_names = ['Content ID', 'Contributor ID', 'Category', 'Subcategory',
+        'Type', 'Link', 'Rating']
     table = dict()
     if request.method == 'POST':
         type = 'NULL'
@@ -44,8 +46,8 @@ def oc_search():
 @bp.route('/contributor-search', methods=('GET', 'POST'))
 def contributor_search():
     """Renders the page to search for contributors"""
-    col_names = ['ID', 'Full name', 'age', 'Years of experience', 'Portfolio link',
-        'Specialization']
+    col_names = ['ID', 'Full name', 'age', 'Years of experience',
+        'Portfolio link', 'Specialization']
     table = dict()
     if request.method == 'POST':
         name = request.form['name']
@@ -59,7 +61,31 @@ def contributor_search():
 def show_contributors():
     """Renders the page to show contributors in order of
     highest years of experience"""
-    col_names = ['ID', 'Full name', 'Years of experience', 'Specialization', 'Portfolio_link']
+    col_names = ['ID', 'Full name', 'Years of experience',
+        'Specialization', 'Portfolio_link']
     table = user_show_contributors()
     return load_template('user/show-contributors.html',
         title='Show Contributors', table=table, col_names=col_names)
+
+
+@bp.route('/show-oc', methods=('GET', 'POST'))
+def show_oc():
+    col_names = ['Contributor ID', 'Contributor fullname', 'E-mail', 'Birthday',
+        'Age', 'Years of experience', 'Portfolio link', 'Specialization',
+        'Content ID', 'Category', 'Subcategory', 'Upload year', 'Rating']
+    table = dict()
+    if request.method == 'POST':
+        if request.form['id'] == '':
+            table = user_show_oc()
+        else:
+            error = None
+            try:
+                int(request.form['id'])
+            except ValueError:
+                error = 'Invalid ID'
+            if not error:
+                table = user_show_oc(request.form['id'])
+            else:
+                flash('Invalid input.')
+    return load_template('user/show-oc.html', title='Show Original Content',
+        table=table, col_names=col_names)

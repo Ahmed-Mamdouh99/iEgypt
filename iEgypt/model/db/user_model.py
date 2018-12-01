@@ -1,4 +1,5 @@
 from . import get_conn
+import pyodbc
 
 
 def validate_profile_params(params):
@@ -26,7 +27,10 @@ def user_search_oc(type, cat):
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(sql)
-    rows = cursor.fetchall()
+    try:
+      rows = cursor.fetchall()
+    except pyodbc.ProgrammingError:
+      rows = []
     conn.close()
     return rows
 
@@ -38,7 +42,10 @@ def user_search_contributor(fullname):
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(sql)
-    rows = cursor.fetchall()
+    try:
+      rows = cursor.fetchall()
+    except pyodbc.ProgrammingError:
+      rows = []
     conn.close()
     return rows
 
@@ -49,7 +56,25 @@ def user_show_contributors():
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(sql)
-    rows = cursor.fetchall()
+    try:
+      rows = cursor.fetchall()
+    except pyodbc.ProgrammingError:
+      rows = []
+    conn.close()
+    return rows
+
+
+def user_show_oc(contributor_id='NULL'):
+    """Returns the result from proc Show_Original_Content"""
+    sql = 'EXEC Show_Original_Content {contributor_id}'
+    sql = sql.format(contributor_id=contributor_id)
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    try:
+      rows = cursor.fetchall()
+    except pyodbc.ProgrammingError:
+      rows = []
     conn.close()
     return rows
 
@@ -79,6 +104,9 @@ def user_get_profile(user_id):
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(sql)
-    row = cursor.fetchone()
+    try:
+      row = cursor.fetchone()
+    except pyodbc.ProgrammingError:
+      rows = -1
     conn.close()
     return row
