@@ -5,7 +5,10 @@ from iEgypt.config import config
 def get_conn():
     """Return a new connection"""
     if config.get('OS').lower() == 'windows':
-        pass
+        conn = pyodbc.connect(driver='{SQL Server}', Trusted_Connection='yes',
+            server=config.get('db_server'), database=config.get('db_name'))
+        return conn
+
     elif config.get('OS').lower() == 'linux':
         conn_str = (
             "DRIVER={ODBC Driver 17 for SQL Server};"
@@ -32,6 +35,7 @@ def get_user(email, password): #Takes in a request object r
     cursor = conn.cursor()
     cursor.execute(sql)
     row = cursor.fetchone()
+    conn.close()
     try:
         return int(row[0])
     except Exception:
@@ -72,6 +76,7 @@ def register_user(params):
     cursor = conn.cursor()
     cursor.execute(sql)
     row = cursor.fetchone()
+    conn.close()
     try:
         return int(row[0])
     except Exception:
@@ -86,6 +91,7 @@ def user_search_og(type='NULL', cat='NULL'):
     cursor = conn.cursor()
     cursor.exec(sql)
     row = cursor.fetchone()
+    conn.close()
     return row
 
 
@@ -97,6 +103,7 @@ def user_search_contributor(fullname):
     cursor = conn.cursor()
     cursor.execute(sql)
     rows = cursor.fetchall()
+    conn.close()
     res = []
     for row in rows:
         res += [row]
@@ -121,6 +128,7 @@ def get_user_type(user_id):
     cursor = conn.cursor()
     cursor.execute(sql)
     row = cursor.fetchone()
+    conn.close()
     type = row[0]
     if row[0] in ('Viewer', 'Contributor', 'Staff'):
         return row[0]
@@ -142,6 +150,7 @@ def edit_user(params):
     cursor = conn.cursor()
     cursor.execute(sql)
     rows = cursor.fetchall()
+    conn.close()
     res = []
     for row in rows:
         res += [row]
@@ -174,4 +183,5 @@ def get_profile(user_id):
     cursor = conn.cursor()
     cursor.execute(sql)
     row = cursor.fetchone()
+    conn.close()
     return row
