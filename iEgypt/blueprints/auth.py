@@ -1,6 +1,6 @@
 import functools
 from flask import(
-   redirect, Blueprint, g, session, request, abort
+   redirect, Blueprint, g, session, request, abort, url_for
    )
 
 from iEgypt.model.db import get_user, edit_user, get_user_type
@@ -57,7 +57,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
         user_id = get_user(email, password)
-        if user == -1:
+        if user_id == -1:
             error = 'Incorrect login.'
         else:
             # Store the user id in a new session and go to index
@@ -79,7 +79,7 @@ def logout():
 
 
 # Register
-@bp.route('/register')
+@bp.route('/register', methods=('GET', 'POST'))
 def register():
     """Register a new user.
 

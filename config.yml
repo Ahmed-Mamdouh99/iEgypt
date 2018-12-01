@@ -3,9 +3,11 @@ hostname: localhost
 port: 3000
 
 # DB config
-db_server: Express
-db_username: SA
+# Choose either Windows or Linux
+OS: Linux
+db_server: localhost
 db_name: IEgypt_78
+# Linux settings
+db_username: SA
 db_password: Password1
 db_port: 1433
-db_driver: {ODBC Driver 17 for SQL Server}

@@ -3,36 +3,39 @@ from iEgypt.config import config
 
 
 def get_conn():
-
     """Return a new connection"""
-    params = dict()
-    params['server'] = config.get('db_server')
-    params['database'] = config.get('db_name')
-    params['uname'] = config.get('db_username')
-    params['passwd'] = config.get('db_password')
-    params['driver'] = config.get('db_driver')
-    params['port'] = config.get('db_port')
-    conn = pyodbc.connect('DRIVER={driver};SERVER={server};PORT={port};\
-    DATABASE={database};UID={uname};PWD={passwd}'.format(**params))
-    return conn
+    if config.get('OS').lower() == 'windows':
+        pass
+    elif config.get('OS').lower() == 'linux':
+        conn_str = (
+            "DRIVER={ODBC Driver 17 for SQL Server};"
+            "DATABASE="+str(config.get('db_name'))+";"
+            "UID="+str(config.get('db_username'))+";"
+            "PWD="+str(config.get('db_password'))+";"
+            "SERVER="+str(config.get('db_server'))+";"
+            "port="+str(config.get('db_port'))+";"
+        )
+        return pyodbc.connect(conn_str)
+
 
 def get_user(email, password): #Takes in a request object r
     """ Returns a user id or -1 """
     sql = """\
-            DECLARE @user_id INTEGER;
-            EXEC User_login {email}, {password}, @user_id OUT;
-            SELECT @out AS output;\
+            SET NOCOUNT ON
+            DECLARE @user_id INTEGER = -1;
+            EXEC User_login '{email}', '{password}', @user_id OUT;
+            SELECT @user_id AS output;\
         """
-    sql.format(email=email, password=password)
+    sql = sql.format(email=email, password=password)
     # Query the database
-    with get_conn() as conn:
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        row = cursor.fetchone()
-        try:
-            return int(row[0])
-        except Exception:
-            return -1
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    row = cursor.fetchone()
+    try:
+        return int(row[0])
+    except Exception:
+        return -1
 
 
 def validate_profile_params(params):
@@ -63,45 +66,48 @@ def register_user(params):
             {payment_rate}, @user_id OUT;
             SELECT @user_id AS output;\
         """
-    sql.format(**params)
+    sql = sql.format(**params)
     # Executing the query
-    with get_conn() as conn:
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        row = cursor.fetchone()
-        try:
-            return int(row[0])
-        except Exception:
-            return -1
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    row = cursor.fetchone()
+    try:
+        return int(row[0])
+    except Exception:
+        return -1
 
 
 def user_search_og(type='NULL', cat='NULL'):
     """Return the result from proc Search_Original_Content"""
-    sql = 'EXEC Original_Content_Search {type}, {category};'.format(type=type, category=cat)
-    with get_conn() as conn:
-        cursor = conn.cursor()
-        cursor.exec(sql)
-        row = cursor.fetchone()
-        return row
+    sql = "EXEC Original_Content_Search '{type}', '{category}'"
+    sql = sql.format(type=type, category=cat)
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.exec(sql)
+    row = cursor.fetchone()
+    return row
+
 
 def user_search_contributor(fullname):
     """Return the result from prom Contributor_Search"""
-    sql = 'EXEC Contributor_Search {fullname}'
-    sql.format(fullname=fullname)
-    with get_conn() as conn:
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        rows = cursor.fetchall()
-        res = []
-        for row in rows:
-            res += [row]
-        return res
+    sql = "EXEC Contributor_Search '{fullname}'"
+    sql = sql.format(fullname=fullname)
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    res = []
+    for row in rows:
+        res += [row]
+    return res
+
 
 def get_user_type(user_id):
     """Returns the user type of a user in the database or None if the user is not found"""
     sql = """
         DECLARE @user_type VARCHAR(255) = '-1'
-        DECLATE @user_id INTEGER = {user_id}
+        DECLARE @user_id INTEGER = {user_id}
         IF EXISTS (SELECT * FROM [Viewer] WHERE ID=@user_id)
             SET @user_type = 'Viewer'
         ELSE IF EXISTS (SELECT * FROM [Contributor] WHERE ID=@user_id)
@@ -110,13 +116,14 @@ def get_user_type(user_id):
             SET @user_type = 'Staff'
         SELECT @user_type AS output
         """
-    with get_conn() as conn:
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        row = cursor.fetchone()
-        type = row[0]
-        if row[0] in ('Viewer', 'Contributor', 'Staff'):
-            return row[0]
+    sql = sql.format(user_id=user_id)
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    row = cursor.fetchone()
+    type = row[0]
+    if row[0] in ('Viewer', 'Contributor', 'Staff'):
+        return row[0]
 
 def edit_user(params):
     if validate_profile_params:
@@ -129,16 +136,16 @@ def edit_user(params):
             '{portfolio_link}', {years_experience}, '{hire_date}', {working_hours}, \
             {payment_rate};\
         """
-    sql.format(**params)
+    sql = sql.format(**params)
     # Executing the query
-    with get_conn() as conn:
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        rows = cursor.fetchall()
-        res = []
-        for row in rows:
-            res += [row]
-        return res
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    res = []
+    for row in rows:
+        res += [row]
+    return res
 
 
 def get_profile(user_id):
@@ -162,11 +169,9 @@ def get_profile(user_id):
             @specilization, @portfolio_link, @years_experience, @hire_date, @working_hours, \
             payment_rate;\
         """
-    sql.format(user_id=user_id)
-    with get_conn() as conn:
-        cursor = conn.cursor()
-        cursor.execute(sql)
-        row = cursor.fetchone()
-        return row
-
-###################################
+    sql = sql.format(user_id=user_id)
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    row = cursor.fetchone()
+    return row
