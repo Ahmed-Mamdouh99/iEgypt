@@ -3,7 +3,7 @@ from flask import(
    redirect, Blueprint, g, session, request, abort, url_for
    )
 
-from iEgypt.model.db import get_user, edit_user, get_user_type
+from iEgypt.model.db.auth_model import get_user, user_edit_profile, get_user_type
 from iEgypt.model.overloaded import load_template
 
 # Create the blueprint

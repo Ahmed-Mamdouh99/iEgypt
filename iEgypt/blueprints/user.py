@@ -5,7 +5,9 @@ from flask import (
     Blueprint, session, redirect, url_for, request
 )
 from iEgypt.model.overloaded import load_template
-from iEgypt.model.db import user_search_oc, user_search_contributor
+from iEgypt.model.db.user_model import(
+    user_search_oc, user_search_contributor, user_show_contributors
+)
 
 
 #Create the blueprint
@@ -35,17 +37,29 @@ def oc_search():
         if request.form['category'] != '':
             cat = request.form['category']
         table = user_search_oc(type, cat)
-    return load_template('user/oc-search.html', title='Search Original Content', table=table, col_names=col_names)
+    return load_template('user/oc-search.html', title='Search Original Content',
+        table=table, col_names=col_names)
 
 
 @bp.route('/contributor-search', methods=('GET', 'POST'))
 def contributor_search():
     """Renders the page to search for contributors"""
-    return load_template('user/contributor-search.html', title='Search Contributor')
+    col_names = ['ID', 'Full name', 'age', 'Years of experience', 'Portfolio link',
+        'Specialization']
+    table = dict()
+    if request.method == 'POST':
+        name = request.form['name']
+        table = user_search_contributor(name)
+
+    return load_template('user/contributor-search.html',
+        title='Search Contributor', table=table, col_names=col_names)
 
 
 @bp.route('/show-contributors')
 def show_contributors():
     """Renders the page to show contributors in order of
     highest years of experience"""
-    return load_template('user/show-contributors.html', title='Show Contributors')
+    col_names = ['ID', 'Full name', 'Years of experience', 'Specialization', 'Portfolio_link']
+    table = user_show_contributors()
+    return load_template('user/show-contributors.html',
+        title='Show Contributors', table=table, col_names=col_names)

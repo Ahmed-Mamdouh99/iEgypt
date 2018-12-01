@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{% if table|length > 0 %}
+<table class="table">
+  <thead>
+    <tr>
+      {% for col_name in col_names %}
+      <th scope="col">{{col_name}}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in table %}
+    <tr>
+    {% for cell in row %}
+      <td>{{cell}}</td>
+    {% endfor %}
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<span>No results to show.</span>
+{% endif %}
+{% endblock %}
