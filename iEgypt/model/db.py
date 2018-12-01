@@ -83,16 +83,20 @@ def register_user(params):
         return -1
 
 
-def user_search_og(type='NULL', cat='NULL'):
+def user_search_oc(type, cat):
     """Return the result from proc Search_Original_Content"""
-    sql = "EXEC Original_Content_Search '{type}', '{category}'"
+    if type != 'NULL':
+        type = "'"+type+"'"
+    if cat != 'NULL':
+        cat = "'"+cat+"'"
+    sql = "EXEC Original_Content_Search {type}, {category}"
     sql = sql.format(type=type, category=cat)
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.exec(sql)
-    row = cursor.fetchone()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
     conn.close()
-    return row
+    return rows
 
 
 def user_search_contributor(fullname):
@@ -104,10 +108,7 @@ def user_search_contributor(fullname):
     cursor.execute(sql)
     rows = cursor.fetchall()
     conn.close()
-    res = []
-    for row in rows:
-        res += [row]
-    return res
+    return rows
 
 
 def get_user_type(user_id):
@@ -151,10 +152,7 @@ def edit_user(params):
     cursor.execute(sql)
     rows = cursor.fetchall()
     conn.close()
-    res = []
-    for row in rows:
-        res += [row]
-    return res
+    return rows
 
 
 def get_profile(user_id):

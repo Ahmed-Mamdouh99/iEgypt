@@ -2,9 +2,10 @@
 Routes and views for the flask application.
 """
 from flask import (
-    Blueprint, session, redirect, url_for
+    Blueprint, session, redirect, url_for, request
 )
 from iEgypt.model.overloaded import load_template
+from iEgypt.model.db import user_search_oc, user_search_contributor
 
 
 #Create the blueprint
@@ -22,9 +23,19 @@ def home():
 
 
 @bp.route('/oc-search', methods=('GET', 'POST'))
-def original_content_search():
+def oc_search():
     """Renders the page to search for original content"""
-    return load_template('user/oc-search.html', title='Search Original Content')
+    col_names = ['Content ID', 'Contributor ID', 'Category', 'Subcategory', 'Type', 'Link', 'Rating']
+    table = dict()
+    if request.method == 'POST':
+        type = 'NULL'
+        cat = 'NULL'
+        if request.form['type'] != '':
+            type = request.form['type']
+        if request.form['category'] != '':
+            cat = request.form['category']
+        table = user_search_oc(type, cat)
+    return load_template('user/oc-search.html', title='Search Original Content', table=table, col_names=col_names)
 
 
 @bp.route('/contributor-search', methods=('GET', 'POST'))

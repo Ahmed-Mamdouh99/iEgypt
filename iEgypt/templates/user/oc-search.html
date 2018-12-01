@@ -1,17 +1,33 @@
-{% extends layout.html %}
+{% extends 'layout.html' %}
 
 {% block content %}
+<!-- Search form -->
+<form class="form-inline md-form form-sm mt-0" method="post">
+  <input name="type" class="form-control form-control-sm ml-3 w-25" type="text" placeholder="Content type" aria-label="Search">
+  <input name="category" class="form-control form-control-sm ml-3 w-25" type="text" placeholder="Category" aria-label="Search">
+  <input type="submit" value="Search">
+</form>
+</br>
+{% if table|length > 0 %}
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Content Manager ID</th>
-      <th scope="col">Reviewer ID</th>
-      <th scope="col">Rating</th>
+      {% for col_name in col_names %}
+      <th scope="col">{{col_name}}</th>
+      {% endfor %}
     </tr>
   </thead>
-{% for content in original_content %}
-
-{% endfor %}
+  <tbody>
+  {% for row in table %}
+    <tr>
+    {% for cell in row %}
+      <td>{{cell}}</td>
+    {% endfor %}
+    </tr>
+  {% endfor %}
+  </tbody>
 </table>
+{% else %}
+<span>No results to show.</span>
+{% endif %}
 {% endblock %}
