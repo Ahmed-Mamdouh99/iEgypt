@@ -79,7 +79,7 @@ def user_show_oc(contributor_id='NULL'):
     return rows
 
 
-def user_get_profile(user_id):
+def user_get_profile(user_id, user_type):
     """Returns the result of proc Show_Profile"""
     sql = """\
             SET NOCOUNT ON
