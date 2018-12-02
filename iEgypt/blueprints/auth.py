@@ -125,28 +125,4 @@ def register():
     return load_template('auth/register.html', title='Register')
 
 
-@bp.route('/edit-profile', methods=('GET', 'POST'))
-@login_required
-def edit_profile():
-    if request.method == 'POST':
-        paramset = {'user type', 'email', 'password', 'first_name', 'middle_name',
-                'last_name', 'birthdate', 'working_place_name', 'working_place_type',
-                'working_place_description', 'specilization', 'portfolio_link',
-                'years_experience', 'hire_date', 'working_hours', 'payment_rate'
-                }
-        #Creating dictionary
-        params = dict()
-        # Getting parameters from form
-        for key in paramset:
-            val = request.form[key]
-            if val == '':
-                val = 'NULL'
-            params[key] = val
-        error = edit_user(params)
-        if not error:
-            return redirect(url_for('auth.show-profile'))
-        flash('Erorr editing profile')
-    return load_template('auth/edit-profile.html')
-
-
 ####

@@ -7,7 +7,7 @@ from flask import (
 from iEgypt.model.overloaded import load_template
 from iEgypt.model.db.user_model import(
     user_search_oc, user_search_contributor, user_show_contributors,
-    user_show_oc, user_get_profile
+    user_show_oc, user_get_profile, user_edit_profile
 )
 from iEgypt.blueprints.auth import login_required
 
@@ -112,9 +112,30 @@ def show_profile():
 @login_required
 def edit_profile():
     """Renders a page to edit a user's profile"""
-    if request.method == 'POST':
-        pass
     user_id = session.get('user_id')
+
+    if request.method == 'POST':
+        paramset = {'user_type', 'email', 'password', 'first_name', \
+            'middle_name', 'last_name', 'birthdate', 'working_place_name', \
+            'working_place_type', 'working_place_description', 'specilization', \
+            'portfolio_link', 'years_experience', 'hire_date', 'working_hours', \
+            'payment_rate'\
+            }
+        #Creating dictionary
+        params = dict()
+        # Getting parameters from form
+        for key in paramset:
+            val = request.form.get(key)
+            if not val or val == '':
+                val = 'NULL'
+            else:
+                try:
+                    int(val)
+                except ValueError:
+                    val = "'{value}'".format(value=val)
+            params[key] = val
+        user_edit_profile(user_id, params)
+
     user_type = session.get('user_type')
     labels = user_get_profile(user_id, user_type)
-    return load_template('user/show-profile.html', labels=labels)
+    return load_template('user/edit-profile.html', labels=labels)
