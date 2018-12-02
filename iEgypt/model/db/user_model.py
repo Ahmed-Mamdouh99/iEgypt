@@ -6,11 +6,11 @@ def validate_profile_params(params):
     """ validates input from the registeration form"""
     # TODO - might need further validation
     try:
-        if params['years_of_experience'] != 'NULL':
+        if params['years_of_experience'] not in ('NULL', ''):
             int(params['years_of_experience'])
-        if params['working_hours'] != 'NULL':
+        if params['working_hours']  not in ('NULL', ''):
             int(params['working_hours'])
-        if params['payment_rate'] != 'NULL':
+        if params['payment_rate']  not in ('NULL', ''):
             float(params['payment_rate'])
     except Exception:
         return 1
@@ -82,6 +82,7 @@ def user_show_oc(contributor_id='NULL'):
 def user_get_profile(user_id):
     """Returns the result of proc Show_Profile"""
     sql = """\
+            SET NOCOUNT ON
             DECLARE @email VARCHAR(255), @password VARCHAR(255), @first_name VARCHAR(255), \
             @middle_name VARCHAR(255), @last_name VARCHAR(255), @birth_date DATETIME, \
             @working_place_name VARCHAR(255), @working_place_type VARCHAR(255), \

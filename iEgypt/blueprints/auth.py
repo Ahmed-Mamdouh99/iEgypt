@@ -1,9 +1,9 @@
 import functools
 from flask import(
-   redirect, Blueprint, g, session, request, abort, url_for
+   redirect, Blueprint, g, session, request, abort, url_for, flash
    )
 
-from iEgypt.model.db.auth_model import get_user, user_edit_profile, get_user_type
+from iEgypt.model.db.auth_model import get_user, user_edit_profile, get_user_type, register_user
 from iEgypt.model.overloaded import load_template
 
 # Create the blueprint
@@ -21,6 +21,10 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+def clear_session():
+    session.clear()
 
 
 # Wrapper to check account type
@@ -63,7 +67,6 @@ def login():
             # Store the user id in a new session and go to index
             session.clear()
             session['user_id'] = user_id
-            #TODO - Get the account type
             session['user_type'] = get_user_type(user_id)
             return redirect(url_for('user.home'))
         flash(error)
@@ -88,26 +91,36 @@ def register():
     """
     if request.method == 'POST':
         # Defining parameters
-        paramset = {'user type', 'email', 'password', 'first_name', 'middle_name',
-                'last_name', 'birthdate', 'working_place_name', 'working_place_type',
-                'working_place_description', 'specilization', 'portfolio_link',
-                'years_experience', 'hire_date', 'working_hours', 'payment_rate'\
-                }
+        paramset = {'user_type', 'email', 'password', 'first_name', \
+            'middle_name', 'last_name', 'birthdate', 'working_place_name', \
+            'working_place_type', 'working_place_description', 'specilization', \
+            'portfolio_link', 'years_experience', 'hire_date', 'working_hours', \
+            'payment_rate'\
+            }
         #Creating dictionary
         params = dict()
         # Getting parameters from form
         for key in paramset:
-            val = request.form[key]
-            if val == '':
+            val = request.form.get(key)
+            if not val or val == '':
                 val = 'NULL'
+            else:
+                try:
+                    int(val)
+                except ValueError:
+                    val = "'{value}'".format(value=val)
             params[key] = val
         # Try to register the user to the database
-        user_id = db.register(params)
+        error = None
+        user_id = register_user(params)
+        for i in range(20):
+            print(user_id)
         if user_id == -1:
             error = 'Email already registered.'
-        if error is None:
-            # the name is available, store it in the database and go to
-            # the login page
+        if not error:
+            session.clear()
+            session['user_id'] = user_id
+            session['user_type'] = get_user_type(user_id)
             return redirect(url_for('user.home'))
         flash(error)
 

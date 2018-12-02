@@ -20,4 +20,10 @@ if __name__ == '__main__':
     port = config.get('port')
     app.secret_key = 'secret'
     set_database_procedures()
-    app.run(hostname, port)
+    try:
+        app.run(hostname, port)
+    except KeyboardInterrupt:
+        import os
+        from iEgypt.blueprints.auth import clear_session
+        clear_session()
+        os._exit(0)

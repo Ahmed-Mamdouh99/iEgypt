@@ -7,8 +7,9 @@ from flask import (
 from iEgypt.model.overloaded import load_template
 from iEgypt.model.db.user_model import(
     user_search_oc, user_search_contributor, user_show_contributors,
-    user_show_oc
+    user_show_oc, user_get_profile
 )
+from iEgypt.blueprints.auth import login_required
 
 
 #Create the blueprint
@@ -16,6 +17,11 @@ bp = Blueprint('user', __name__, url_prefix='/')
 
 
 @bp.route('/')
+def index():
+    """Renders the home page."""
+    return load_template('user/home.html', title='Home')
+
+
 @bp.route('/home')
 def home():
     """Renders the home page."""
@@ -70,9 +76,10 @@ def show_contributors():
 
 @bp.route('/show-oc', methods=('GET', 'POST'))
 def show_oc():
+    """Renders a page to show original content"""
     col_names = ['Contributor ID', 'Contributor fullname', 'E-mail', 'Birthday',
         'Age', 'Years of experience', 'Portfolio link', 'Specialization',
-        'Content ID', 'Category', 'Subcategory', 'Upload year', 'Rating']
+        'Content ID', 'Category', 'Subcategory', 'Year', 'Rating']
     table = dict()
     if request.method == 'POST':
         if request.form['id'] == '':
@@ -89,3 +96,23 @@ def show_oc():
                 flash('Invalid input.')
     return load_template('user/show-oc.html', title='Show Original Content',
         table=table, col_names=col_names)
+
+
+@bp.route('/show-profile')
+@login_required
+def show_profile():
+    """Renders a page to show a user's profile"""
+    user_id = session.get('user_id')
+    table = user_get_profile(user_id)
+    user_type = sesison.get('user_type')
+    col_names = ['Email', 'Password', 'First name', 'Middle name', 'Last name',
+        'Birthday']
+    if user_type == 'viewer':
+        col_names += ['Working place name', 'Working place type',
+            'Working place description']
+    elif user_type == 'contributor':
+        col_names += ['Specialization', 'Portfolio link', 'Years of experience']
+    else:
+        col_names += ['Hire date', 'Working hours', 'Payment rate']
+
+    return load_template('show-profile.html', table=table, col_names=col_names)

@@ -1,36 +1,41 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-4">
+<div class="row" style"height=100%">
+  <div class="col">
     <div class="jumbotron">
-      <h1>Search</h1>
-      <p class="lead"> for original content by its type or its category.</p>
-      <p><a href="{{url_for('user.oc_search')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+      <h1>Search For...</h1>
+      <div class="row">
+        <div class="col">
+          <p class="lead"> Original content by its type or its category.</p>
+          <p><a href="{{url_for('user.oc_search')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+        </div>
+        <vl>
+        <div class="col">
+          <p class="lead">Contributors by their name.</p>
+          <p><a href="{{url_for('user.contributor_search')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="col-md-4">
+  <div class="col">
     <div class="jumbotron">
-      <h1>Show</h1>
-      <p class="lead">contributors in order of years of experience.</p>
-      <p><a href="{{url_for('user.show_contributors')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
-    </div>
-  </div>
+      <h1>Browse...</h1>
+      <div class="row">
+        <div class="col">
+          <p class="lead">Contributors in order of years of experience.</p>
+          <p><a href="{{url_for('user.show_contributors')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+        </div>
+        <vl>
+        <div class="col">
+            <p class="lead">Original content and contributor info.</p>
+            <p><a href="{{url_for('user.show_oc')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+        </div>
+      </div>
 
-  <div class="col-md-4">
-    <div class="jumbotron">
-      <h1>Search</h1>
-      <p class="lead">for a contributor by their name.</p>
-      <p><a href="{{url_for('user.contributor_search')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
-    </div>
+    <div>
   </div>
-
-  <div class="col-md-4">
-    <div class="jumbotron">
-      <h1>Show</h1>
-      <p class="lead">original content and contributor info.</p>
-      <p><a href="{{url_for('user.show_oc')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
     </div>
   </div>
 </div>

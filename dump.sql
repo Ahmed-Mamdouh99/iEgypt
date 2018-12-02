@@ -35,7 +35,7 @@ CREATE OR ALTER PROC Contributor_Search(@fullname VARCHAR(255)) AS
     SELECT u.ID, (u.first_name+' '+u.middle_name+' '+u.last_name) AS 'Full Name', u.age, c.years_of_experience, c.portfolio_link, c.specialization
     FROM [User] u JOIN
          [Contributor] c ON u.ID = c.ID
-    WHERE (u.ID = c.ID AND (u.first_name+' '+u.middle_name+' '+u.last_name) LIKE '%'+@fullname+'%');
+    WHERE (u.ID = c.ID AND (u.first_name+' '+u.middle_name+' '+u.last_name) LIKE '%'+@fullname+'%') OR (u.ID = c.ID AND (u.first_name+' '+u.last_name) LIKE '%'+@fullname+'%');
   END
 GO
 
@@ -135,9 +135,7 @@ AS
     IF @contributor_id IS NULL
       BEGIN
         SELECT cr.ID,
-               (u.first_name+' '+
-               u.middle_name+' '+
-               u.last_name) AS 'Full name',
+               (u.first_name+' '+u.middle_name+' '+u.last_name) AS 'Full name',
                u.email,
                u.birth_date,
                u.age,

@@ -1,57 +1,88 @@
 {% extends "layout.html" %}
 {% block content %}
-  <form method="post">
-      <label for="user-type"> User Type</label>
-      <select class="form-control">
+<form method="post">
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Email</label>
+    <div class="col-sm-4">
+      <input name="email" type="email" class="form-control" placeholder="Email" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Password</label>
+    <div class="col-sm-4">
+      <input name="password" type="password" class="form-control" placeholder="Password" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">First name</label>
+    <div class="col-sm-4">
+      <input name="first_name" class="form-control" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Middle name</label>
+    <div class="col-sm-4">
+      <input name="middle_name" class="form-control">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Last name</label>
+    <div class="col-sm-4">
+      <input name="last_name" class="form-control" required>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label  class="col-sm-2 col-form-label">Birthday</label>
+    <div class="col-sm-4">
+      <input name="birthdate" class="form-control" placeholder="31-12-2000">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Account type</label>
+    <div class="col-sm-4">
+      <select name="user_type" class="form-control">
         <option>Viewer</option>
         <option>Contributor</option>
-        <option>Authorized Reviewer</option>
-        <option>Content Manager</option>
+        <option>Reviewer</option>
+        <option>Content manager</option>
       </select>
-
-    <div class="user_credentials">
-      <label for="email">E-mail</label>
-      <input type="email" name="email" required>
-      <label for="password">Password</label>
-      <input type="password" name="password" required>
-      <label for="first_name">First Name</label>
-      <input name="first_name" required>
-      <label for="middle_name">Middle Name</label>
-      <input name="middle_name" required>
-      <label for="last_name">Last Name</label>
-      <input name="last_name" required>s
-      <label for="birthdate">Birth date</label>
-      <input name="birthdate" required>
     </div>
+  </div>
 
-    <div id="viewer_credentials">
-      <label for="working_place_name">Working Place Name</label>
-      <input name="working_palce_name">
-      <label for="working_place_type">Working Place Type</label>
-      <input name="working_place_type">
-      <label for="working_place_description">Working Place Description</label>
-      <input name="working_place_description">
-    </div>
-
-    <div class="contributor">
-      <label for="specialization">Specilization</label>
-      <input name="specilization">
-      <label for="portfolio_link">Portfolio Link</label>
-      <input name="portfolio_link">
-      <label for="years_experience">Years Of Experience</label>
-      <input name="years_experience">
-    </div>
-
-    <div class="staff">
-      <label for="hire_date">Hire Date</label>
-      <input name="hire_date">
-      <label for="working_hours">working Hours</label>
-      <input name="working_hours">
-      <label for="payment_rate">Payment Rate</label>
-      <input name="payment_rate">
+  <div id="varied_options">
+    <div class="form-group row">
+      <label  class="col-sm-2 col-form-label">Working place name</label>
+      <div class="col-sm-4">
+        <input name="working_place_name" class="form-control">
       </div>
-    <input type="submit" value="Register">
-  </form>
+    </div>
+    <div class="form-group row">
+      <label  class="col-sm-2 col-form-label">Working place type</label>
+      <div class="col-sm-4">
+        <input name="working_place_type" class="form-control">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label  class="col-sm-2 col-form-label">Working place description</label>
+      <div class="col-sm-4">
+        <input name="working_place_description" class="form-control">
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-4">
+      <button id="user_type" type="submit" class="btn btn-primary">Sign in</button>
+    </div>
+  </div>
+</form>
 {%  endblock %}
 <!--Add post request script-->
-{% block script %}{% endblock %}
+{% block scripts %}
+<script src="{{url_for('static', filename='scripts/register.js')}}"></script>
+{% endblock %}

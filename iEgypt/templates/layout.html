@@ -8,31 +8,37 @@
 </head>
 
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a href="/" class="navbar-brand">iEgypt</a>
-            </div>
-            <div class="navbar ">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('user.home') }}">Home</a></li>
-                    {% if logged_in%}
-                      <!--Add the show profile thingy-->
-                      <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
-                    {% else %}
-                      <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-                      <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </div>
+  <header class="navbar navbar-expand flex-column flex-md-row">
+    <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="iEgypt">iEgypt</a>
+    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+      {% if logged_in %}
+      <li class="nav-item">
+        <a class="nav-link p-2" href="{{ url_for('user.home') }}" aria-label="Home">Home</a>
+      </li>
 
-    <div class="container body-content">
-        {% block content %}{% endblock %}
-        <hr />
-    </div>
+      <li class="nav-item">
+        <a class="nav-link p-2" href="{{ url_for('user.show_profile') }}" aria-label="Profile">Profile</a>
+      </li>
 
+      <li class="nav-item">
+      <a class="nav-link p-2" href="{{ url_for('auth.logout') }}" aria-label="Logout">Logout</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+      <a class="nav-link p-2" href="{{ url_for('auth.login') }}" aria-label="Login">Login</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link p-2" href="{{ url_for('auth.register') }}" aria-label="Register">Register</a>
+    </li>
+    {%endif%}
+  </ul>
+  </header>
+
+  <div class="container-fluid">
+    {% block content %}{% endblock %}
+    <hr />
+    </div>
     <script src="{{url_for('static', filename='scripts/bootstrap.js')}}"></script>
     {% block scripts %}{% endblock %}
 
