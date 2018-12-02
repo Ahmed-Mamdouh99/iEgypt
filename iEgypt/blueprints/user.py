@@ -129,8 +129,13 @@ def show_profile():
     return load_template('user/show-profile.html', labels=labels)
 
 
-@bp.route('/edit-profile')
+@bp.route('/edit-profile', methods=('GET', 'POST'))
 @login_required
 def edit_profile():
     """Renders a page to edit a user's profile"""
-    
+    if request.method == 'POST':
+
+    user_id = session.get('user_id')
+    user_type = session.get('user_type')
+    labels = user_get_profile(user_id, user_type)
+    return load_template('user/show-profile.html', labels=labels)

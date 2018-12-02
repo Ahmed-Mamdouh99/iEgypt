@@ -105,9 +105,27 @@ def user_get_profile(user_id):
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(sql)
-    try:
-      row = cursor.fetchone()
-    except pyodbc.ProgrammingError:
-      rows = -1
+    row = cursor.fetchone()
     conn.close()
-    return row
+    col_names = ['Email', 'Password', 'First name', 'Middle name', 'Last name',
+         'Birthday', 'Working place name', 'Working place type',
+         'Working place description', 'Specialization', 'Portfolio link',
+         'Years of experience', 'Hire date', 'Working hours', 'Payment rate']
+    labels = dict()
+    for i in range(len(row)):
+        labels[col_names[i]] = row[i]
+    viewer_labels = ('Working place name', 'Working place type', \
+     'Working place type')
+    contributor_labels = ('Specialization', 'Portfolio link', \
+     'Years of experience')
+    staff_labels = ('Hire date', 'Working hours', 'Payment rate')
+    if user_type == 'viewer':
+        for label in staff_labels+contributor_labels:
+            labels.pop(label, None)
+    elif user_type == 'Contributor':
+        for label in viewer_labels+staff_labels:
+            labels.pop(label, None)
+    else:
+        for label in viewer_labels+contributor_labels:
+            labels.pop(label, None)
+    return labels
