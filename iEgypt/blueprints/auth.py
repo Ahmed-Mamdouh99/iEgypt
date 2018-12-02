@@ -123,6 +123,3 @@ def register():
         flash(error)
 
     return load_template('auth/register.html', title='Register')
-
-
-####
