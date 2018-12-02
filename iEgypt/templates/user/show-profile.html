@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+  {% for label, value in labels.items() %}
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label">{{label}}</label>
+      <div class="col-sm-4">
+        <input class="form-control" type="text" placeholder="{{value}}" readonly>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}

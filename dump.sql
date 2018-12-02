@@ -202,7 +202,7 @@ CREATE OR ALTER PROC Show_Profile @user_id                   INTEGER,
                          @lastname                  VARCHAR(255) OUTPUT, @birth_date DATETIME OUTPUT,
                          @working_place_name        VARCHAR(255) = NULL OUTPUT,
                          @working_place_type        VARCHAR(255) = NULL OUTPUT,
-                         @wokring_place_description TEXT = NULL OUTPUT,
+                         @wokring_place_description VARCHAR(255) = NULL OUTPUT,
                          @specilization             VARCHAR(255) = NULL OUTPUT,
                          @portofolio_link           VARCHAR(255) = NULL OUTPUT,
                          @years_experience          INTEGER = NULL OUTPUT,
@@ -272,7 +272,7 @@ CREATE OR ALTER PROC Edit_Profile @user_id                   VARCHAR(255), @emai
                          @middlename                VARCHAR(255) = NULL, @lastname VARCHAR(255) = NULL,
                          @birth_date                DATETIME = NULL,
                          @working_place_name        VARCHAR(255) = NULL, @working_place_type VARCHAR(255) = NULL,
-                         @working_place_description TEXT = NULL, @specilization VARCHAR(255) = NULL,
+                         @working_place_description VARCHAR(255) = NULL, @specilization VARCHAR(255) = NULL,
                          @portfolio_link            VARCHAR(255) = NULL, @years_experience INTEGER = NULL,
                          @hire_date                 DATETIME = NULL, @working_hours INTEGER = NULL,
                          @payment_rate              REAL = NULL
@@ -631,7 +631,7 @@ AS
   END
 GO
 
-CREATE OR ALTER PROC Viewer_Create_Event @city        VARCHAR(255), @event_date_time DATETIME, @description TEXT,
+CREATE OR ALTER PROC Viewer_Create_Event @city        VARCHAR(255), @event_date_time DATETIME, @description VARCHAR(255),
                                 @entertainer VARCHAR(255), @viewer_id INTEGER, @location VARCHAR(255),
                                 @event_id    INTEGER OUT
 AS
@@ -699,7 +699,7 @@ AS
   END
 GO
 
-CREATE OR ALTER PROC Apply_New_Request @information TEXT, @contributor_id INTEGER, @viewer_id INTEGER
+CREATE OR ALTER PROC Apply_New_Request @information VARCHAR(255), @contributor_id INTEGER, @viewer_id INTEGER
 AS
   BEGIN
     IF @information IS NOT NULL AND EXISTS (SELECT * FROM [Viewer] WHERE ID = @viewer_id)
@@ -785,7 +785,7 @@ AS
   END
 GO
 
-CREATE OR ALTER PROC Write_Comment @comment_text TEXT, @viewer_id INTEGER, @original_content_id INTEGER, @written_time DATETIME
+CREATE OR ALTER PROC Write_Comment @comment_text VARCHAR(255), @viewer_id INTEGER, @original_content_id INTEGER, @written_time DATETIME
 AS
   BEGIN
     IF EXISTS(SELECT * FROM [Viewer] WHERE ID = @viewer_id) AND EXISTS (SELECT * FROM [Original_Content] WHERE ID = @original_content_id) AND @written_time IS NOT NULL
@@ -834,7 +834,7 @@ AS
   END
 GO
 
-CREATE OR ALTER PROC Edit_Comment @comment_text      TEXT, @viewer_id INTEGER, @original_content_id INTEGER,
+CREATE OR ALTER PROC Edit_Comment @comment_text      VARCHAR(255), @viewer_id INTEGER, @original_content_id INTEGER,
                          @last_written_time DATETIME, @updated_written_time DATETIME
 AS
   BEGIN
@@ -851,7 +851,7 @@ AS
   END
 GO
 
-CREATE OR ALTER PROC Edit_Ad @ad_id INTEGER, @description TEXT, @location VARCHAR(255)
+CREATE OR ALTER PROC Edit_Ad @ad_id INTEGER, @description VARCHAR(255), @location VARCHAR(255)
 AS
   BEGIN
     IF @description IS NOT NULL
@@ -862,7 +862,7 @@ AS
   END
 GO
 
-CREATE OR ALTER PROC Create_Ads @viewer_id INTEGER, @description TEXT, @location VARCHAR(255)
+CREATE OR ALTER PROC Create_Ads @viewer_id INTEGER, @description VARCHAR(255), @location VARCHAR(255)
 AS
   BEGIN
     INSERT INTO [Advertisement] (description, location, viewer_id) VALUES (@description, @location, @viewer_id);
@@ -876,7 +876,7 @@ AS
   END
 GO
 
-CREATE OR ALTER PROC Send_Message @msg_text TEXT, @viewer_id INTEGER, @contributor_id INTEGER, @sender_type BIT,
+CREATE OR ALTER PROC Send_Message @msg_text VARCHAR(255), @viewer_id INTEGER, @contributor_id INTEGER, @sender_type BIT,
                          @sent_at  DATETIME
 AS
   BEGIN

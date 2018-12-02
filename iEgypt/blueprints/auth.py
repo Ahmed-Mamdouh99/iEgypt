@@ -113,8 +113,6 @@ def register():
         # Try to register the user to the database
         error = None
         user_id = register_user(params)
-        for i in range(20):
-            print(user_id)
         if user_id == -1:
             error = 'Email already registered.'
         if not error:

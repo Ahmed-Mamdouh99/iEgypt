@@ -86,20 +86,20 @@ def user_get_profile(user_id):
             DECLARE @email VARCHAR(255), @password VARCHAR(255), @first_name VARCHAR(255), \
             @middle_name VARCHAR(255), @last_name VARCHAR(255), @birth_date DATETIME, \
             @working_place_name VARCHAR(255), @working_place_type VARCHAR(255), \
-            @working_place_description TEXT, @specilization  VARCHAR(255), \
+            @working_place_description VARCHAR(255), @specilization  VARCHAR(255), \
             @portfolio_link  VARCHAR(255), @years_experience INTEGER, @hire_date DATETIME, \
             @working_hours INTEGER, @payment_rate REAL;
-            \
-            EXEC Show_Profile @{user_id}, @email OUT, @password OUT, @first_name OUT, \
+
+            EXEC Show_Profile {user_id}, @email OUT, @password OUT, @first_name OUT, \
             @middle_name OUT, @last_name OUT, @birth_date OUT, @working_place_name OUT, \
             @working_place_type OUT, @working_place_description OUT, @specilization OUT, \
             @portfolio_link OUT, @years_experience OUT, @hire_date OUT, @working_hours OUT, \
             @payment_rate OUT;
-            \
+
             SELECT @email, @password, @first_name, @middle_name, @last_name, @birth_date, \
             @working_place_name, @working_place_type, @working_place_description, \
             @specilization, @portfolio_link, @years_experience, @hire_date, @working_hours, \
-            payment_rate;\
+            @payment_rate;\
         """
     sql = sql.format(user_id=user_id)
     conn = get_conn()
