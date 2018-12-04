@@ -74,6 +74,7 @@ def register(**user_data):
     # Check if the email exists
     sql = "SELECT * FROM [user] WHERE email='{email}'".format(**user_data)
     with get_conn() as conn:
+        print(sql)
         cursor = conn.cursor()
         cursor.execute(sql)
         if cursor.fetchone():

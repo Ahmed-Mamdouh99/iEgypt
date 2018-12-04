@@ -27,8 +27,8 @@ def load_logged_in_user():
 def login():
     """Log in a registered user by adding the user_id to the session."""
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form['email'].replace("'", '')
+        password = request.form['password'].replace("'", '')
         user_id = user_model.login(email, password)
         if not user_id:
             error = 'User does not exist.'
@@ -51,14 +51,16 @@ def register():
     if request.method == 'POST':
         #Creating dictionary
         params = dict()
-        user_id = user_model.register(**request.form)
+        for key in request.form:
+            params[key] = request.form[key].replace("'", '')
+        user_id = user_model.register(**params)
         error = None
         if not user_id:
             error = 'Email already registered.'
         if not error:
             session.clear()
             session['user_id'] = user_id
-            session['user_type'] = request.form['type']
+            session['user_type'] = request.form['type'].replace("'", '')
             return redirect(url_for('user.home'))
         flash(error)
 
@@ -104,9 +106,9 @@ def search_oc():
     category = None
     if request.method == 'POST':
         if request.form['type'] != '':
-            type = request.form['type']
+            type = request.form['type'].replace("'", '')
         if request.form['category'] != '':
-            type = request.form['category']
+            type = request.form['category'].replace("'", '')
     table = user_model.search_oc(type=type, category=category)
     return load_template('user/search-oc.html', title='Search Original Content',
         table=table, col_names=col_names)
@@ -120,7 +122,7 @@ def contributor_search():
     name = None
     if request.method == 'POST':
         if request.form['name'] != '':
-            name = request.form['name']
+            name = request.form['name'].replace("'", '')
     table = user_model.contributor_search(name)
     return load_template('user/contributor-search.html',
         title='Search Contributor', table=table, col_names=col_names)
@@ -146,7 +148,7 @@ def show_oc():
     id = None
     if request.method == 'POST':
         if request.form['id'] != '':
-            id = request.form['id']
+            id = request.form['id'].replace("'", '')
     table = user_model.show_original_content(id=id)
     return load_template('user/show-oc.html', title='Show Original Content',
         table=table, col_names=col_names)
@@ -176,9 +178,9 @@ def edit_profile():
         user_data = dict()
         for key in request.form.keys():
             if key in user_keys and request.form[key] != '':
-                user_data[key] = request.form[key]
+                user_data[key] = request.form[key].replace("'", '')
             elif (not key in user_keys) and request.form[key] != '':
-                other_data[key] = request.form[key]
+                other_data[key] = request.form[key].replace("'", '')
         if len(other_data) > 0 or len(user_data) > 0:
             user_model.edit_profile(user_id, user_type, user_data, other_data)
 
