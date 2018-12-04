@@ -31,13 +31,16 @@ def login():
         password = request.form['password']
         user_id = user_model.login(email, password)
         if not user_id:
-            error = 'Incorrect login.'
-        else:
+            error = 'User does not exist.'
+        elif user_id == -1:
+            error = 'This account has been deactivated'
+        if not error:
             # Store the user_id in a new session and go to index
             session.clear()
             session['user_id'] = user_id
             session['user_type'] = user_model.get_user_type(user_id)
             return redirect(url_for('user.home'))
+        print('ERROR', error)
         flash(error)
     return load_template('user/login.html', title='Login')
 
@@ -51,13 +54,12 @@ def register():
         user_id = user_model.register(**request.form)
         error = None
         if not user_id:
-            print('HERE')
             error = 'Email already registered.'
         if not error:
             session.clear()
             session['user_id'] = user_id
             session['user_type'] = request.form['type']
-            return redirect(url_for('user.show_profile'))
+            return redirect(url_for('user.home'))
         flash(error)
 
     return load_template('user/register.html', title='Register')
@@ -74,6 +76,7 @@ def logout():
 def deactivate():
     user_id = session.get('user_id')
     user_model.deactivate_profile(user_id)
+    session.clear()
     return load_template('user/deactivated.html')
 
 
@@ -98,7 +101,7 @@ def search_oc():
     col_names = ['content id', 'category type', 'type', 'link', 'rating', \
     'contributor id']
     type = None
-    cat = None
+    category = None
     if request.method == 'POST':
         if request.form['type'] != '':
             type = request.form['type']

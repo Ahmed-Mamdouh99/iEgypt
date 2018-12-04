@@ -83,13 +83,13 @@ GO
 --messagess
 CREATE TABLE [messages] (
   [sent at]        DATETIME NOT NULL,
-  [contributer id] INTEGER  NOT NULL REFERENCES [contributor] (id),
+  [contributor id] INTEGER  NOT NULL REFERENCES [contributor] (id),
   [viewer id]      INTEGER  NOT NULL REFERENCES [viewer] (id),
   [sender type]    BIT      NOT NULL,
   [read at]        DATETIME,
   text           VARCHAR(255)     NOT NULL,
   [read status]    BIT     NOT NULL DEFAULT 0,
-  PRIMARY KEY ([sent at], [contributer id], [viewer id], [sender type])
+  PRIMARY KEY ([sent at], [contributor id], [viewer id], [sender type])
 );
 GO
 
@@ -123,7 +123,7 @@ CREATE TABLE [new request] (
   information    VARCHAR(255)                NOT NULL,
   [viewer id]      INTEGER             NOT NULL REFERENCES [viewer] (id) ON DELETE CASCADE,
   [notif obj id]   INTEGER             NOT NULL UNIQUE REFERENCES [notification object] (id) ON DELETE CASCADE,
-  [contributer id] INTEGER REFERENCES [contributor] (id)
+  [contributor id] INTEGER REFERENCES [contributor] (id)
 );
 GO
 
@@ -131,7 +131,7 @@ GO
 CREATE TABLE [content] (
   id               INTEGER PRIMARY KEY NOT NULL IDENTITY,
   [uploaded at]      DATETIME            NOT NULL,
-  [contributer id]   INTEGER             NOT NULL REFERENCES [contributor] (id),
+  [contributor id]   INTEGER             NOT NULL REFERENCES [contributor] (id),
   [category type]    VARCHAR(255)        NOT NULL,
   [subcategory name] VARCHAR(255)        NOT NULL,
   type             VARCHAR(255) REFERENCES [content type] (type),

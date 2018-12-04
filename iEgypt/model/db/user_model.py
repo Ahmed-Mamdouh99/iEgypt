@@ -26,15 +26,15 @@ def get_user_type(id):
 
 def search_oc(type, category):
     condition = ''
-    if type or cat:
+    if type or category:
         condition = "WHERE "
         if type:
             condition += "type='{type}' AND ".format(type=type)
-        if cat:
+        if category:
             condition += "category='{category}'".format(category=category)
     sql = """\
     SELECT c.id, [contributor id], [category type], type, link, rating
-    FROM [Original_Content] oc JOIN [Content] c ON c.id=oc.id
+    FROM [original content] oc JOIN [Content] c ON c.id=oc.id
     """
     sql += condition
     with get_conn() as conn:
@@ -68,30 +68,16 @@ def contributor_search(name=None):
 
 
 def register(**user_data):
-    keys = (key for key, _ in user_data.items())
-    for key in keys:
-        user_data[key] = user_data[key].lower()
-    # Data validation
-    # Validate user_data
-    user_keys = ('type', 'email', 'password', 'first name', 'middle name', 'last name',\
-                'birthday')
-    for key in user_keys:
-        if not key in user_data:
-            return
-    # Validate account type
-    if not user_data.get('type') in('viewer', 'contributor', 'content manager', 'reviewer'):
-        print('type', user_data['type'])
-        return
-
-    # TODO - Validate birthday format
-
+    #keys = (key for key, _ in user_data.items())
+    #for key in keys:
+    #    user_data[key] = user_data[key].lower()
     # Check if the email exists
     sql = "SELECT * FROM [user] WHERE email='{email}'".format(**user_data)
     with get_conn() as conn:
         cursor = conn.cursor()
         cursor.execute(sql)
         if cursor.fetchone():
-            return
+            return -1
     # Register user
     sql = """\
     SET NOCOUNT ON
@@ -164,14 +150,14 @@ def order_contributor():
 
 def show_original_content(id=None):
     sql = """\
-    SELECT ct.id AS 'content id', [category type], subcategory, YEAR([uploaded at]) AS\
+    SELECT ct.id AS 'content id', [category type], [subcategory name], YEAR([uploaded at]) AS\
      'year', rating, ([first name]+' '+[middle name]+' '+[last name]) AS \
     'full name', email, birthday, age, [years of experience], [portfolio link],\
     specialization
     FROM [user] u JOIN [contributor] cr ON u.id=cr.id
-                  JOIN [content] ct ON ct.contributor_id=cr.id
-                  JOIN [original_content] oc ON oc.id = ct.id
-    WHERE filter_status=1
+                  JOIN [content] ct ON ct.[contributor id]=cr.id
+                  JOIN [original content] oc ON oc.id = ct.id
+    WHERE [filter status]=1
     """
     if id:
         sql += " AND cr.id={}".format(id)
@@ -194,6 +180,10 @@ def login(email, password):
     datediff(WEEK, CURRENT_TIMESTAMP, [last login]) <= 2)
     IF @id IS NOT NULL BEGIN
       UPDATE [user] SET [last login]=CURRENT_TIMESTAMP, active=1 WHERE id=@id;
+      SELECT @id;
+    END
+    ELSE IF EXISTS (SELECT * FROM [user] WHERE id=@id) BEGIN
+      SET @id=-1;
       SELECT @id;
     END
     """
