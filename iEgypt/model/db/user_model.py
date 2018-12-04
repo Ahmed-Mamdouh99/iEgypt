@@ -104,9 +104,6 @@ def register(**user_data):
         SELECT @id AS out;
         """
     sql = sql.format(**user_data)
-    print('\n\n\n')
-    print(sql)
-    print('\n\n\n')
     with get_conn() as conn:
         cursor = conn.cursor()
         cursor.execute(sql)
