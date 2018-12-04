@@ -2,10 +2,20 @@
 {% block content %}
   {% for label, value in labels.items() %}
     <div class="form-group row">
-      <label class="col-sm-2 col-form-label">{{label}}</label>
+      <label class="col-sm-2 col-form-label" for="{{label}}">{{label}}</label>
       <div class="col-sm-4">
-        <input class="form-control" type="text" placeholder="{{value}}" readonly>
+        <input class="form-control" id="{{label}}" type="text" placeholder="{{value}}" readonly>
       </div>
     </div>
   {% endfor %}
+  <div class="form-group row">
+    <div class="col-sm-4">
+      <a href="{{url_for('user.edit_profile')}}"><button class="btn btn-primary">edit</button></a>
+    </div>
+  </div>
+  <div class="form-group row">
+    <br>
+    <div class="col-sm-4">
+      <a href="{{url_for('user.deactivate')}}"><button class="btn btn-primary">deactivate profile</button></a>
+    </div>
 {% endblock %}

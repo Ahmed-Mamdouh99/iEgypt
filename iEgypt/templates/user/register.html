@@ -2,68 +2,75 @@
 {% block content %}
 <form method="post">
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Email</label>
+    <label class="col-sm-2 col-form-label">email</label>
     <div class="col-sm-4">
       <input name="email" type="email" class="form-control" placeholder="Email" required>
     </div>
   </div>
 
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Password</label>
+    <label class="col-sm-2 col-form-label">password</label>
     <div class="col-sm-4">
       <input name="password" type="password" class="form-control" placeholder="Password" required>
     </div>
   </div>
 
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">First name</label>
+    <label class="col-sm-2 col-form-label">first name</label>
     <div class="col-sm-4">
-      <input name="first_name" class="form-control" required>
+      <input name="first name" class="form-control" required>
     </div>
   </div>
 
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Middle name</label>
+    <label class="col-sm-2 col-form-label">middle name</label>
     <div class="col-sm-4">
-      <input name="middle_name" class="form-control">
+      <input name="middle name" class="form-control">
     </div>
   </div>
 
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Last name</label>
+    <label class="col-sm-2 col-form-label">last name</label>
     <div class="col-sm-4">
-      <input name="last_name" class="form-control" required>
+      <input name="last name" class="form-control" required>
     </div>
   </div>
 
   <div class="form-group row">
-    <label  class="col-sm-2 col-form-label">Birthday</label>
+    <label  class="col-sm-2 col-form-label">birthday</label>
     <div class="col-sm-4">
-      <input name="birthdate" class="form-control" placeholder="31-12-2000">
+      <input name="birthday" class="form-control" placeholder="31-12-2000" required>
     </div>
   </div>
 
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Account type</label>
+    <label class="col-sm-2 col-form-label">account type</label>
     <div class="col-sm-4">
-      <select name="user_type" class="form-control">
-        <option>Viewer</option>
-        <option>Contributor</option>
-        <option>Reviewer</option>
-        <option>Content manager</option>
+      <select name="type" class="form-control">
+        <option value="viewer">viewer</option>
+        <option value="contributor">contributor</option>
+        <option value="reviewer">reviewer</option>
+        <option value="content manager">content manager</option>
       </select>
     </div>
   </div>
 
+  <div class="form-group row">
+    <div class="col-sm-4">
+      <button id="user_type" type="submit" class="btn btn-primary">Register</button>
+    </div>
+  </div>
+</form>
+<!--
   <div id="varied_options">
     <div class="form-group row">
-      <label  class="col-sm-2 col-form-label">Working place name</label>
+      <label  class="col-sm-2 col-form-label">working place name</label>
       <div class="col-sm-4">
         <input name="working_place_name" class="form-control">
       </div>
     </div>
     <div class="form-group row">
-      <label  class="col-sm-2 col-form-label">Working place type</label>
+      <label  class="col-sm-2 col-form-label">working place type</label>
       <div class="col-sm-4">
         <input name="working_place_type" class="form-control">
       </div>
@@ -75,14 +82,10 @@
       </div>
     </div>
   </div>
-  <div class="form-group row">
-    <div class="col-sm-4">
-      <button id="user_type" type="submit" class="btn btn-primary">Sign in</button>
-    </div>
-  </div>
-</form>
+-->
 {%  endblock %}
-<!--Add post request script-->
+<!--
 {% block scripts %}
 <script src="{{url_for('static', filename='scripts/register.js')}}"></script>
 {% endblock %}
+-->

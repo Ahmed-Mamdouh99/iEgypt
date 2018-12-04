@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+  <form method="post">
+  {% for label, value in labels.items() %}
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label" for="{{label}}">{{label}}</label>
+      <div class="col-sm-4">
+        <input name="{{label}}" class="form-control" id="{{label}}" type="text" placeholder="{{value}}">
+      </div>
+    </div>
+  {% endfor %}
+    <div class="form-group row">
+      <div class="col-sm-4">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}

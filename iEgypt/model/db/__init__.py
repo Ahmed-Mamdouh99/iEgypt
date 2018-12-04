@@ -1,11 +1,12 @@
 import pyodbc
 from iEgypt.config import config
 
+
 def get_conn():
     """Return a new connection"""
     if config.get('OS').lower() == 'windows':
         conn = pyodbc.connect(driver='{SQL Server}', Trusted_Connection='yes',
-            server=config.get('db_server'), database=config.get('db_name'))
+            server=config.get('db_server'), database=config.get('db_name'), autocommit=True)
         return conn
 
     elif config.get('OS').lower() == 'linux':
@@ -17,4 +18,5 @@ def get_conn():
             "SERVER="+str(config.get('db_server'))+";"
             "port="+str(config.get('db_port'))+";"
         )
-        return pyodbc.connect(conn_str)
+        conn = pyodbc.connect(conn_str, autocommit=True)
+        return conn

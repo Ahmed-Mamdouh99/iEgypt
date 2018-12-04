@@ -21,15 +21,15 @@
       </li>
 
       <li class="nav-item">
-      <a class="nav-link p-2" href="{{ url_for('auth.logout') }}" aria-label="Logout">Logout</a>
+      <a class="nav-link p-2" href="{{ url_for('user.logout') }}" aria-label="Logout">Logout</a>
     </li>
     {% else %}
     <li class="nav-item">
-      <a class="nav-link p-2" href="{{ url_for('auth.login') }}" aria-label="Login">Login</a>
+      <a class="nav-link p-2" href="{{ url_for('user.login') }}" aria-label="Login">Login</a>
     </li>
 
     <li class="nav-item">
-      <a class="nav-link p-2" href="{{ url_for('auth.register') }}" aria-label="Register">Register</a>
+      <a class="nav-link p-2" href="{{ url_for('user.register') }}" aria-label="Register">Register</a>
     </li>
     {%endif%}
   </ul>
