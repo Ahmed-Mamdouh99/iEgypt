@@ -30,6 +30,7 @@ def login():
         email = request.form['email'].replace("'", '')
         password = request.form['password'].replace("'", '')
         user_id = user_model.login(email, password)
+        error = None
         if not user_id:
             error = 'User does not exist.'
         elif user_id == -1:
@@ -49,7 +50,6 @@ def login():
 def register():
     """Register a new user. Validates that the email is not already registered."""
     if request.method == 'POST':
-        #Creating dictionary
         params = dict()
         for key in request.form:
             params[key] = request.form[key].replace("'", '')
@@ -60,7 +60,7 @@ def register():
         if not error:
             session.clear()
             session['user_id'] = user_id
-            session['user_type'] = request.form['type'].replace("'", '')
+            session['user_type'] = request.form['type']
             return redirect(url_for('user.home'))
         flash(error)
 
