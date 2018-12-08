@@ -74,7 +74,6 @@ def register(**user_data):
     # Check if the email exists
     sql = "SELECT * FROM [user] WHERE email='{email}'".format(**user_data)
     with get_conn() as conn:
-        print(sql)
         cursor = conn.cursor()
         cursor.execute(sql)
         if cursor.fetchone():
@@ -95,13 +94,8 @@ def register(**user_data):
         """
     else:
         sql += """\
-        DECLARE @notified_id INTEGER;
-        SELECT @notified_id=MAX(id) FROM [notified person];
-        SET @notified_id=@notified_id+1
-        SET IDENTITY_INSERT [notified person] ON
-        INSERT INTO [notified person] (id) VALUES (@notified_id);
-        SET IDENTITY_INSERT [notified person] OFF
-        INSERT INTO [{type}] (id, [notified id]) VALUES (@id, @notified_id);
+        INSERT INTO [notified person] (id) VALUES (@id);
+        INSERT INTO [{type}] (id, [notified id]) VALUES (@id, @id);
         SELECT @id AS out;
         """
     sql = sql.format(**user_data)
