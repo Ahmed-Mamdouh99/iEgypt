@@ -210,8 +210,10 @@ def show_profile(user_id, user_type):
     with get_conn() as conn:
         cursor = conn.cursor().execute(sql)
         columns = [column[0] for column in cursor.description]
-        result = dict(zip(columns, cursor.fetchone()))
-        return result
+        result = []
+        for row in cursor.fetchall():
+            result.append(dict(zip(columns, row)))
+        return result[0]
 
 
 def deactivate_profile(user_id):

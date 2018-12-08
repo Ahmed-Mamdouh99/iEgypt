@@ -56,6 +56,8 @@ def register():
         user_id = user_model.register(**params)
         error = None
         if not user_id:
+            error = 'Invalid data.'
+        elif user_id == -1 :
             error = 'Email already registered.'
         if not error:
             session.clear()

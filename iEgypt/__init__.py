@@ -10,9 +10,10 @@ app = Flask(__name__)
 
 
 # Registering blueprints
-from iEgypt.blueprints import user, viewer
+from iEgypt.blueprints import user, viewer, contributor
 app.register_blueprint(user.bp, url_prefix=('/'))
 app.register_blueprint(viewer.bp, url_prefix=('/'))
+app.register_blueprint(contributor.bp, url_prefix=('/'))
 
 
 # Adding custom error pages

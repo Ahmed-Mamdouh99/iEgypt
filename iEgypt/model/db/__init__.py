@@ -4,6 +4,7 @@ from iEgypt.config import config
 
 def get_conn():
     """Return a new connection"""
+	
     if config.get('OS').lower() == 'windows':
         conn = pyodbc.connect(driver='{SQL Server}', Trusted_Connection='yes',
             server=config.get('db_server'), database=config.get('db_name'), autocommit=True)

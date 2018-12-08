@@ -1,10 +1,4 @@
-USE TEMP
-DROP DATABASE IEgypt_78;
 
-CREATE DATABASE IEgypt_78;
-GO
-USE IEgypt_78;
-GO
 -----------------------------------------------------------------------------------------------------------------------
 --Creating tables
 
