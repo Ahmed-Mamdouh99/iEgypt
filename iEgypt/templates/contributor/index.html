@@ -2,4 +2,22 @@
 {% block content %}
 <h1 style="font=san-serif">COMING SOON</h1>
 <p style="font=san-serif">...Definitely...</p>
+
+<div class="row" style"height=100%">
+  <div class="col">
+    <div class="jumbotron">
+      <h1>Upload</h1>
+      <div class="row">
+        <div class="col">
+          <p class="lead"> Original content. </p>
+          <p><a href="{{url_for('contributor.upload_oc')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+        </div>
+        <vl>
+        <div class="col">
+          <p class="lead"> New content. </p>
+          <p><a href="{{url_for('contributor.upload_nc')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

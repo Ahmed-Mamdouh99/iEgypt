@@ -2,62 +2,36 @@
 {% block content %}
 <form method="post">
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">email</label>
+    <label class="col-sm-2 col-form-label">category</label>
     <div class="col-sm-4">
-      <input name="" type="email" class="form-control" placeholder="Email" required>
+      <input name="category type" type="email" class="form-control"  required>
     </div>
   </div>
 
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">password</label>
+    <label class="col-sm-2 col-form-label">subcategory</label>
     <div class="col-sm-4">
-      <input name="password" type="password" class="form-control" placeholder="Password" required>
+      <input name="subcategory name" class="form-control" required>
     </div>
   </div>
 
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">first name</label>
+    <label class="col-sm-2 col-form-label">type id</label>
     <div class="col-sm-4">
-      <input name="first name" class="form-control" required>
+      <input name="type id" class="form-control" required>
     </div>
   </div>
 
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">middle name</label>
+    <label class="col-sm-2 col-form-label">link</label>
     <div class="col-sm-4">
-      <input name="middle name" class="form-control">
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">last name</label>
-    <div class="col-sm-4">
-      <input name="last name" class="form-control" required>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label  class="col-sm-2 col-form-label">birthday</label>
-    <div class="col-sm-4">
-      <input name="birthday" class="form-control" placeholder="31-12-2000" required>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">account type</label>
-    <div class="col-sm-4">
-      <select name="type" class="form-control">
-        <option value="viewer">viewer</option>
-        <option value="contributor">contributor</option>
-        <option value="reviewer">reviewer</option>
-        <option value="content manager">content manager</option>
-      </select>
+      <input name="link" class="form-control" required>
     </div>
   </div>
 
   <div class="form-group row">
     <div class="col-sm-4">
-      <button id="user_type" type="submit" class="btn btn-primary">Register</button>
+      <button type="submit" class="btn btn-primary">Upload</button>
     </div>
   </div>
 </form>
