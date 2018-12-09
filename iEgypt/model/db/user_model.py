@@ -117,7 +117,7 @@ def check_type(user_id, type):
         except Exception:
             raise Exception
     # Perform task
-    sql = "UPDATE [content manager] SET type='{}' WHERE id={}".formate(type, id)
+    sql = "UPDATE [content manager] SET type='{}' WHERE id={}".format(type, id)
     with get_conn() as conn:
         cursor = conn.cursor()
         cursor.execute(sql)
