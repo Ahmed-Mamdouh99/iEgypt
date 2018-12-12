@@ -6,18 +6,73 @@
 <div class="row" style"height=100%">
   <div class="col">
     <div class="jumbotron">
-      <h1>Upload</h1>
+      <h1>Upload...</h1>
       <div class="row">
         <div class="col">
           <p class="lead"> Original content. </p>
           <p><a href="{{url_for('contributor.upload_oc')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
         </div>
-        <vl>
         <div class="col">
           <p class="lead"> New content. </p>
           <p><a href="{{url_for('contributor.upload_nc')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="col">
+      <div class="jumbotron">
+        <h1>View...</h1>
+        <div class="row">
+          <div class="col">
+            <p class="lead">Notifications.</p>
+            <p><a href="{{url_for('user.show_contributors')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+          </div>
+          <div class="col">
+              <p class="lead">Events.</p>
+              <p><a href="{{url_for('contributor.show_events')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+          </div>
+        </div>
+      <div>
+    </div>
+      </div>
+    </div>
+
+    <div class="col">
+        <div class="jumbotron">
+          <h2>Messages...</h2>
+          <div class="row">
+            <div class="col">
+              <p class="lead">Send</p>
+              <p><a href="{{url_for('user.show_contributors')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+            </div>
+            <div class="col">
+                <p class="lead">Inbox</p>
+                <p><a href="{{url_for('contributor.show_events')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+            </div>
+          </div>
+        <div>
+      </div>
+        </div>
+      </div>
+
+      <div class="col">
+          <div class="jumbotron">
+            <h2>Management...</h2>
+            <div class="row">
+              <div class="col">
+                <p class="lead">Delete Original Content.</p>
+                <p><a href="{{url_for('user.show_contributors')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+              </div>
+              <div class="col">
+                  <p class="lead">Respond to New Requests</p>
+                  <p><a href="{{url_for('contributor.show_events')}}" class="btn btn-primary btn-large">Go &raquo;</a></p>
+              </div>
+            </div>
+          <div>
+        </div>
+          </div>
+        </div>
+
   </div>
 {% endblock %}
