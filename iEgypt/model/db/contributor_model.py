@@ -47,11 +47,11 @@ def show_nr(request_id, contributor_id):
     WHERE ([contributor id] = {contributor_id} OR specified = 0)\
   """
 
-  if request_id:
-      sql += 'AND id={request_id}'.format(request_id=request_id)
-  sql.format(contributor_id=contributor_id)
+    if request_id:
+        sql += 'AND id={request_id}'.format(request_id=request_id)
+    sql.format(contributor_id=contributor_id)
 
-    
+
 
 
 def show_events(id=None):

@@ -192,8 +192,7 @@ def login(email, password):
 
 def show_profile(user_id, user_type):
     sql = """\
-    SELECT u.id, email, ([first name]+' '+[middle name]+' '+[last name]) AS \
-    'full name', password, birthday, \
+    SELECT email, [first name], [middle name], [last name], password, birthday, \
     """
     if user_type == 'viewer':
         sql += "[working place], [working place type], \

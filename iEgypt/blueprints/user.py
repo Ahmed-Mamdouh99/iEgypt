@@ -187,5 +187,4 @@ def edit_profile():
             user_model.edit_profile(user_id, user_type, user_data, other_data)
 
     labels = user_model.show_profile(user_id, user_type)
-    labels.pop('id')
     return load_template('user/edit-profile.html', labels=labels)
