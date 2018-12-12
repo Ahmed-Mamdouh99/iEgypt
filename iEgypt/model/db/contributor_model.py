@@ -42,16 +42,42 @@ def upload_nc(id,params):
 
 def show_nr(request_id, contributor_id):
     sql="""\
-    SELECT * []
+    SELECT id, specified, information, [viewer id]
     FROM [new request]
-    WHERE ([contributor id] = {contributor_id} OR specified = 0)\
+    WHERE (([contributor id] = {contributor_id} AND [accept status] IS NULL) OR \
+    (specified = 0 AND [accept status] IS NULL))\
   """
-
+    sql.format(contributor_id=contributor_id)
     if request_id:
         sql += 'AND id={request_id}'.format(request_id=request_id)
-    sql.format(contributor_id=contributor_id)
+    with get_conn() as conn:
+        cursor = conn.cursor().execute(sql)
+        try:
+            columns = [column[0] for column in cursor.description]
+            result = []
+            for row in cursor.fetchall():
+                result.append(dict(zip(columns,row)))
+            return result
+        except Exception:
+            return []
 
 
+def respond_nr(contributor_id, accepted, rejected):
+    if len(accepted) == 0 and len(rejected) == 0:
+        return
+    sql = ''
+    if len(accepted) > 0:
+        sql += 'UPDATE [new request] SET [accept status]=1 WHERE id in ('+accepted[0]
+        for i in range(1, len(accepted)):
+            sql += ", {}".format(accepted[i])
+        sql += ');\n'
+    if len(rejected) > 0:
+        sql += 'UPDATE [new request] SET [accept status]=0 WHERE id in ('+rejected[0]
+        for i in range(1, len(rejected)):
+            sql += ", {}".format(rejected[i])
+        sql += ');\n'
+    with get_conn() as conn:
+        conn.cursor().execute(sql)
 
 
 def show_events(id=None):

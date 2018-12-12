@@ -43,14 +43,25 @@ def upload_nc():
     return load_template('contributor/upload-nc.html', title='Upload New Content')
 
 
-@bp.route('/new-requests')
+@bp.route('/new-requests', methods=('GET', 'POST'))
 @login_required
 def show_nr():
+    request_id = None
     col_names= ['id','accept status',  'specified', 'information', 'viewer id',
-     'notif obj id', 'contributor_id']
+        'notif obj id', 'contributor id']
     user_id=session.get('user_id')
-    table=contributor_model.show_nr()
-
+    if request.method == 'POST' and request.form.get('search'): # Filtering request
+        request_id = request.form.get('request_id')
+    if request.method == 'POST' and request.form.get('save'): # Confirming selections
+        accepted_ids = []
+        rejected_ids = []
+        for key, value in request.form.items():
+            if value == 'accept':
+                accepted_ids.append(key)
+            if value == 'reject':
+                rejected_ids.append(key)
+        contributor_model.respond_nr(user_id, accepted_ids, rejected_ids)
+    table=contributor_model.show_nr(userid, request_id)
     return load_template('contributor/new-requests.html', title='New Requests',
      table=table, col_names=col_names)
 
