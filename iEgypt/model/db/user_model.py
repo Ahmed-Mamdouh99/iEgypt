@@ -68,9 +68,6 @@ def contributor_search(name=None):
 
 
 def register(**user_data):
-    #keys = (key for key, _ in user_data.items())
-    #for key in keys:
-    #    user_data[key] = user_data[key].lower()
     # Check if the email exists
     sql = "SELECT * FROM [user] WHERE email='{email}'".format(**user_data)
     with get_conn() as conn:
@@ -89,14 +86,26 @@ def register(**user_data):
     """
     if user_data['type'] == 'viewer':
         sql += """\
-        INSERT INTO [{type}] (id) VALUES (@id);
+        INSERT INTO [viewer] VALUES
+         (@id, '{working place}', '{working place type}', '{working place description}');
         SELECT @id as OUT;
+        """
+    elif user_data['type'] == 'contributor':
+        sql += """\
+        INSERT INTO [notified person] (id) VALUES (@id);
+        INSERT INTO [contributor] (id, [years of experience], [portfolio link], [specialization], [notified id])
+        VALUES
+        (@id, {years of experience}, '{portfolio link}', '{specialization}', @id);
+        SELECT @id AS OUT;
         """
     else:
         sql += """\
         INSERT INTO [notified person] (id) VALUES (@id);
-        INSERT INTO [{type}] (id, [notified id]) VALUES (@id, @id);
-        SELECT @id AS out;
+        INSERT INTO [staff] (id, [hire date], [working hours], [payment rate], [notified id])
+        VALUES
+        (@id, '{hire date}', {working hours}, {payment rate}, @id);
+        INSERT INTO {type} (id) VALUES (@id);
+        SELECT @id AS OUT;
         """
     sql = sql.format(**user_data)
     with get_conn() as conn:
