@@ -2,7 +2,7 @@
  Database project for CSEN501
 ***
 ## First time setup
-1. Install [Python 3.7](https://www.python.org/downloads/release/python-370/) on your machine (if on Windows, make sure to check add python to PATH).
+1. Install [Python 3.7](https://www.python.org/downloads/release/python-370/) on your machine (**if on Windows, make sure to check add python to PATH**).
 2. Create a file named `config.yml`.
 3. Copy the content from `config-example.yml` to `config.yml` then complete the configuration.
 4. Make sure that the SQL EXPRESS Server is running.
