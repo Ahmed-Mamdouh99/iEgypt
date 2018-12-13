@@ -20,7 +20,7 @@ function add_viewer() {
         var input = document.createElement("input");
         input.setAttribute('name', viewer_arr[y]);
         input.setAttribute('class', "form-control");
-        input.setAttribute('type', viewer_Arr_types[y]);
+        input.setAttribute('type', viewer_arr_types[y]);
         input.setAttribute('required', '');
         super_inner_div.appendChild(input);
     }
@@ -48,7 +48,7 @@ function add_contributor(){
       var input = document.createElement("input");
       input.setAttribute('name', contributor_arr[y]);
       input.setAttribute('class', "form-control");
-      input.setAttribute('type', contributir_arr_types[y]);
+      input.setAttribute('type', contributor_arr_types[y]);
       input.setAttribute('required', '');
       super_inner_div.appendChild(input);
   }
@@ -126,9 +126,6 @@ function add_staff(){
 
 function show_selection(){
   var select = document.getElementsByName("type")[0];
-  if(select.length > 4){
-    select.remove(0);
-  }
   var sel = select.options[select.selectedIndex].text;
   var div = document.getElementById("varied_options");
   while(div.firstChild){
