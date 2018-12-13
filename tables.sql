@@ -1,7 +1,3 @@
-
------------------------------------------------------------------------------------------------------------------------
---Creating tables
-
 --users
 CREATE TABLE [user] (
   id          INTEGER PRIMARY KEY          IDENTITY,
@@ -15,7 +11,7 @@ CREATE TABLE [user] (
   [last login]  DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
   active      BIT                 NOT NULL DEFAULT 1
 );
-GO
+
 
 --viewers
 CREATE TABLE [viewer] (
@@ -24,13 +20,13 @@ CREATE TABLE [viewer] (
   [working place type]        VARCHAR(255),
   [working place description] VARCHAR(255)
 );
-GO
+
 
 --Notified Person
 CREATE TABLE [notified person] (
   id INTEGER PRIMARY KEY
 );
-GO
+
 
 -- contributors
 CREATE TABLE [contributor] (
@@ -42,7 +38,7 @@ CREATE TABLE [contributor] (
   [average upload time] DATETIME,
   [current requests] INTEGER NOT NULL DEFAULT 0
 );
-GO
+
 
 --staff
 CREATE TABLE [staff] (
@@ -53,26 +49,26 @@ CREATE TABLE [staff] (
   [total salary] AS ([working hours] * [payment rate]),
   [notified id]   INTEGER NOT NULL REFERENCES [notified person] (id)
 );
-GO
+
 
 --content type
 CREATE TABLE [content type] (
   type VARCHAR(255) PRIMARY KEY NOT NULL
 );
-GO
+
 
 --content manager
 CREATE TABLE [content manager] (
   id   INTEGER PRIMARY KEY  REFERENCES [staff] (id) ON DELETE CASCADE,
   type VARCHAR(255) REFERENCES [content type] (type)
 );
-GO
+
 
 --reviewer
 CREATE TABLE [reviewer] (
   id INTEGER PRIMARY KEY  REFERENCES [staff] (id) ON DELETE CASCADE,
 );
-GO
+
 
 --messagess
 CREATE TABLE [messages] (
@@ -85,14 +81,14 @@ CREATE TABLE [messages] (
   [read status]    BIT     NOT NULL DEFAULT 0,
   PRIMARY KEY ([sent at], [contributor id], [viewer id], [sender type])
 );
-GO
+
 
 --category
 CREATE TABLE [category] (
   type        VARCHAR(255) PRIMARY KEY NOT NULL,
   description VARCHAR(255)
 );
-GO
+
 
 --subcategory
 CREATE TABLE [subcategory] (
@@ -100,13 +96,13 @@ CREATE TABLE [subcategory] (
   name          VARCHAR(255) NOT NULL,
   CONSTRAINT PK_subcategory PRIMARY KEY ([category type], name)
 );
-GO
+
 
 --notification object
 CREATE TABLE [notification object] (
   id INTEGER PRIMARY KEY NOT NULL IDENTITY
 );
-GO
+
 
 --new request
 CREATE TABLE [new request] (
@@ -119,12 +115,12 @@ CREATE TABLE [new request] (
   [notif obj id]   INTEGER             NOT NULL UNIQUE REFERENCES [notification object] (id) ON DELETE CASCADE,
   [contributor id] INTEGER REFERENCES [contributor] (id)
 );
-GO
+
 
 --content
 CREATE TABLE [content] (
   id               INTEGER PRIMARY KEY NOT NULL IDENTITY,
-  [uploaded at]      DATETIME            NOT NULL,
+  [uploaded at]      DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
   [contributor id]   INTEGER             NOT NULL REFERENCES [contributor] (id),
   [category type]    VARCHAR(255)        NOT NULL,
   [subcategory name] VARCHAR(255)        NOT NULL,
@@ -132,7 +128,7 @@ CREATE TABLE [content] (
   link             VARCHAR(255),
   CONSTRAINT FK FOREIGN KEY ([category type], [subcategory name]) REFERENCES [subcategory] ([category type], name)
 );
-GO
+
 
 --original content
 CREATE TABLE [original content] (
@@ -144,7 +140,7 @@ CREATE TABLE [original content] (
   [filter status]      BIT,
   rating             INTEGER
 );
-GO
+
 
 --existing request
 CREATE TABLE [existing request] (
@@ -154,7 +150,7 @@ CREATE TABLE [existing request] (
   [viewer id]           INTEGER             NOT NULL REFERENCES [viewer] (id)
     ON DELETE CASCADE
 );
-GO
+
 
 --new content
 CREATE TABLE [new content] (
@@ -163,7 +159,7 @@ CREATE TABLE [new content] (
   [new request id] INTEGER             NOT NULL REFERENCES [new request] (id)
     ON DELETE CASCADE
 );
-GO
+
 
 --comment
 CREATE TABLE [comment] (
@@ -175,7 +171,7 @@ CREATE TABLE [comment] (
   text                VARCHAR(255)     NOT NULL,
   CONSTRAINT PK_comment PRIMARY KEY ([viewer id], [original content id], date)
 );
-GO
+
 
 --rate
 CREATE TABLE [rate] (
@@ -187,7 +183,7 @@ CREATE TABLE [rate] (
   rate                INTEGER,
   CONSTRAINT [PK_rate] PRIMARY KEY ([viewer id], [original content id])
 );
-GO
+
 
 --event
 CREATE TABLE [event] (
@@ -200,7 +196,7 @@ CREATE TABLE [event] (
   [notification object id] INTEGER             NOT NULL UNIQUE REFERENCES [notification object] (id),
   [viewer id]              INTEGER             NOT NULL REFERENCES [viewer] (id)
 );
-GO
+
 
 --event photos link
 CREATE TABLE [event Photos Link] (
@@ -208,7 +204,7 @@ CREATE TABLE [event Photos Link] (
   link     VARCHAR(255) NOT NULL,
   CONSTRAINT PK_event_Photos_Link PRIMARY KEY ([event id], link)
 );
-GO
+
 
 --event videos link
 CREATE TABLE [event Videos Link] (
@@ -216,7 +212,7 @@ CREATE TABLE [event Videos Link] (
   link     VARCHAR(255) NOT NULL,
   CONSTRAINT PK_event_Videos_Link PRIMARY KEY ([event id], link)
 );
-GO
+
 
 --advertisement
 CREATE TABLE [advertisement] (
@@ -227,7 +223,7 @@ CREATE TABLE [advertisement] (
   [viewer id]   INTEGER             NOT NULL REFERENCES [viewer] (id)
     ON DELETE CASCADE
 )
-GO
+
 
 --Ad video link
 CREATE TABLE [Ads Video Link] (
@@ -236,7 +232,7 @@ CREATE TABLE [Ads Video Link] (
   link             VARCHAR(255) NOT NULL,
   CONSTRAINT PK_Ads_Video_Link PRIMARY KEY ([advertisement id], link)
 );
-GO
+
 
 --Ad photos link
 CREATE TABLE [Ads Photos Link] (
@@ -245,7 +241,7 @@ CREATE TABLE [Ads Photos Link] (
   link             VARCHAR(255) NOT NULL,
   CONSTRAINT PK_Ads_Photos_Link PRIMARY KEY ([advertisement id], link)
 );
-GO
+
 
 --announcement
 CREATE TABLE [announcement] (
@@ -257,4 +253,117 @@ CREATE TABLE [announcement] (
   [notification object id] INTEGER             NOT NULL REFERENCES [notification object] (id)
     ON DELETE CASCADE
 );
-GO
+
+
+
+-----------------------------------------------------------------------------------------------------------
+-- Data insertion
+-----------------------------------------------------------------------------------------------------------
+INSERT INTO [user] (email, [first name], [middle name], [last name], birthday, password) VALUES
+('viewer1@mail', 'Viewer', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('viewer2@mail', 'Viewer', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('viewer3@mail', 'Viewer', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('viewer4@mail', 'Viewer', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+
+('contri1@mail', 'contri', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('contri2@mail', 'contri', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('contri3@mail', 'contri', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('contri4@mail', 'contri', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+
+('review1@mail', 'review', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('review2@mail', 'review', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('review3@mail', 'review', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('review4@mail', 'review', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+
+('manage1@mail', 'manage', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('manage2@mail', 'manage', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('manage3@mail', 'manage', 'Middlename', 'Lastname', '1-1-1999', 'passwd'),
+('manage4@mail', 'manage', 'Middlename', 'Lastname', '1-1-1999', 'passwd');
+
+
+INSERT INTO [viewer] (id, [working place], [working place type], [working place description]) VALUES
+(1, 'Working place', 'Working place type', 'Working place description'),
+(2, 'Working place', 'Working place type', 'Working place description'),
+(3, 'Working place', 'Working place type', 'Working place description'),
+(4, 'Working place', 'Working place type', 'Working place description');
+
+
+INSERT INTO [notified person] (id) VALUES
+(5),
+(6),
+(7),
+(8),
+
+(9),
+(10),
+(11),
+(12),
+
+(13),
+(14),
+(15),
+(16);
+
+
+INSERT INTO [contributor] (id, [years of experience], [portfolio link], specialization, [notified id]) VALUES
+(5, 1, 'portfoliolink.com', 'art', 5),
+(6, 2, 'portfoliolink.com', 'art', 6),
+(7, 3, 'portfoliolink.com', 'art', 7),
+(8, 3, 'portfoliolink.com', 'art', 8);
+
+
+INSERT INTO [staff] (id, [hire date], [working hours], [payment rate], [notified id]) VALUES
+(9, '8/12/2018', 8, 10, 9),
+(10, '12/12/2018', 8, 11, 10),
+(11, '12/12/2018', 8, 15, 11),
+(12, '10/12/2018', 8, 10, 12),
+
+(13, '9/12/2018', 8, 10, 13),
+(14, '8/12/2018', 8, 20, 14),
+(15, '7/12/2018', 8, 10, 15),
+(16, '6/12/2018', 8, 100, 16);
+
+
+INSERT INTO [reviewer] (id) VALUES
+(9),
+(10),
+(11),
+(12);
+
+
+INSERT INTO [content manager] (id) VALUES
+(13),
+(14),
+(15),
+(16);
+
+INSERT INTO [content type] (type) VALUES ('Recreational');
+INSERT INTO [category] (type) VALUES ('Music');
+INSERT INTO [subcategory] ([category type], name) VALUES ('Music', 'Blues');
+
+INSERT INTO [content] ([contributor id], [category type], [subcategory name], type, link) VALUES
+(5, 'Music', 'Blues', 'Recreational', 'content.com'),
+(5, 'Music', 'Blues', 'Recreational', 'content.com'),
+
+(6, 'Music', 'Blues', 'Recreational', 'content.com'),
+(6, 'Music', 'Blues', 'Recreational', 'content.com'),
+
+(7, 'Music', 'Blues', 'Recreational', 'content.com'),
+(7, 'Music', 'Blues', 'Recreational', 'content.com'),
+
+(8, 'Music', 'Blues', 'Recreational', 'content.com'),
+(8, 'Music', 'Blues', 'Recreational', 'content.com');
+
+
+INSERT INTO [original content] (id, [content manager id], [reviewer id], [review status], [filter status], rating) VALUES
+(1, 13, 9, 1, 1, 4),
+(2, 13, 9, 1, 1, 4),
+
+(3, 13, 9, 1, 1, 4),
+(4, 13, 9, 1, 1, 4),
+
+(5, 13, 9, 1, 1, 4),
+(6, 13, 9, 1, 1, 4),
+
+(7, 13, 9, 1, 1, 4),
+(8, 13, 9, 1, 1, 4);

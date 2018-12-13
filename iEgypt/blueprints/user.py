@@ -102,15 +102,15 @@ def home():
 @bp.route('/search-oc', methods=('GET', 'POST'))
 def search_oc():
     """Renders the page to search for original content"""
-    col_names = ['content id', 'category type', 'type', 'link', 'rating', \
+    col_names = ['id', 'category type', 'type', 'link', 'rating', \
     'contributor id']
-    type = None
-    category = None
+    type = ''
+    category = ''
     if request.method == 'POST':
         if request.form['type'] != '':
             type = request.form['type'].replace("'", '')
         if request.form['category'] != '':
-            type = request.form['category'].replace("'", '')
+            category = request.form['category'].replace("'", '')
     table = user_model.search_oc(type=type, category=category)
     return load_template('user/search-oc.html', title='Search Original Content',
         table=table, col_names=col_names)

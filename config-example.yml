@@ -5,9 +5,9 @@ port: 3000
 # DB config
 # Choose either Windows or Linux
 OS: windows
-db_server: Khaled\SQLEXPRESS
+db_server: PCNAME\SQLEPRESS
 db_name: IEgypt_78
-# NOT Linux settings
+# Linux/Unix/Docker settings
 db_username: SA
 db_password: Password1
 db_port: 1433
