@@ -1,7 +1,8 @@
 pip install virtualenv
 virtualenv -p python env
-source env/bin/activate
+env/bin/activate.bat
 pip install -r requirements.txt
+python sql.py
 python runserver.py
 echo Process exited.
 pause
