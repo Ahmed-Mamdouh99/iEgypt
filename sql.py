@@ -20,8 +20,8 @@ def get_server_conn():
         )
         conn = pyodbc.connect(conn_str, autocommit=True)
         return conn
-    
 
+#Creating the database
 with get_server_conn() as conn:
     cursor = conn.cursor()
     cursor.execute('CREATE DATABASE '+config.get('db_name'))
@@ -31,4 +31,4 @@ with get_conn() as conn:
     cursor = conn.cursor()
     with open('tables.sql') as file:
         for command in file.read().split('GO'):
-            cursor.execute(command)
+cursor.execute(command)
