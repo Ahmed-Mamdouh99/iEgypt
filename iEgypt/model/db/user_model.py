@@ -26,17 +26,22 @@ def get_user_type(id):
 
 def search_oc(type, category):
     condition = ''
-    if type or category:
+    if type != '' or category != '':
         condition = "WHERE "
-        if type:
-            condition += "type='{type}' AND ".format(type=type)
-        if category:
-            condition += "category='{category}'".format(category=category)
+        f = False
+        if type != '':
+            condition += "type='{type}'".format(type=type)
+            f = True
+        if category != '':
+            if f:
+                condition += ' AND '
+            condition += "[category type]='{category}'".format(category=category)
     sql = """\
     SELECT c.id, [contributor id], [category type], type, link, rating
     FROM [original content] oc JOIN [Content] c ON c.id=oc.id
     """
     sql += condition
+    print(sql)
     with get_conn() as conn:
         cursor = conn.cursor().execute(sql)
         columns = [column[0] for column in cursor.description]
@@ -48,7 +53,7 @@ def search_oc(type, category):
 
 def contributor_search(name=None):
     condition = ''
-    if name:
+    if name == '':
         conditon = " AND ([first name]+' '+[middle name]+' '+[last name]) like \
         '%{}%' OR ([first name]+' '+[last name]) like '%{}%'".format(name, name)
     sql = """\
@@ -68,9 +73,6 @@ def contributor_search(name=None):
 
 
 def register(**user_data):
-    #keys = (key for key, _ in user_data.items())
-    #for key in keys:
-    #    user_data[key] = user_data[key].lower()
     # Check if the email exists
     sql = "SELECT * FROM [user] WHERE email='{email}'".format(**user_data)
     with get_conn() as conn:
@@ -89,14 +91,26 @@ def register(**user_data):
     """
     if user_data['type'] == 'viewer':
         sql += """\
-        INSERT INTO [{type}] (id) VALUES (@id);
+        INSERT INTO [viewer] VALUES
+         (@id, '{working place}', '{working place type}', '{working place description}');
         SELECT @id as OUT;
+        """
+    elif user_data['type'] == 'contributor':
+        sql += """\
+        INSERT INTO [notified person] (id) VALUES (@id);
+        INSERT INTO [contributor] (id, [years of experience], [portfolio link], [specialization], [notified id])
+        VALUES
+        (@id, {years of experience}, '{portfolio link}', '{specialization}', @id);
+        SELECT @id AS OUT;
         """
     else:
         sql += """\
         INSERT INTO [notified person] (id) VALUES (@id);
-        INSERT INTO [{type}] (id, [notified id]) VALUES (@id, @id);
-        SELECT @id AS out;
+        INSERT INTO [staff] (id, [hire date], [working hours], [payment rate], [notified id])
+        VALUES
+        (@id, '{hire date}', {working hours}, {payment rate}, @id);
+        INSERT INTO {type} (id) VALUES (@id);
+        SELECT @id AS OUT;
         """
     sql = sql.format(**user_data)
     with get_conn() as conn:
@@ -125,8 +139,8 @@ def check_type(user_id, type):
 
 def order_contributor():
     sql = """\
-    SELECT u.id, ([first name]+' '+[middle name]+' '+[last name]) AS \
-    'full name', age, [years of experience], specialization, [portfolio link]
+    SELECT u.id, ([first name]+' '+[middle name]+' '+[last name]) AS'full name',\
+     age, [years of experience], specialization, [portfolio link]
     FROM [contributor] c JOIN [user] u ON c.id=u.id
     WHERE u.active=1
     ORDER BY [years of experience] DESC;
