@@ -20,11 +20,11 @@ def get_server_conn():
         )
         conn = pyodbc.connect(conn_str, autocommit=True)
         return conn
+    
 
-#Creating the database
-'''with get_server_conn() as conn:
+with get_server_conn() as conn:
     cursor = conn.cursor()
-    cursor.execute('CREATE DATABASE '+config.get('db_name'))'''
+    cursor.execute('CREATE DATABASE '+config.get('db_name'))
 
 #Creating the tables
 with get_conn() as conn:
