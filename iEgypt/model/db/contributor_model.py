@@ -44,10 +44,10 @@ def show_nr(request_id, contributor_id):
     sql="""\
     SELECT id, specified, information, [viewer id]
     FROM [new request]
-    WHERE (([contributor id] = {contributor_id} AND [accept status] IS NULL) OR \
-    (specified = 0 AND [accept status] IS NULL))\
+    WHERE ([contributor id] = {contributor_id} AND [accept status] IS NULL) OR \
+    (specified = 0 AND [accept status] IS NULL)\
   """
-    sql.format(contributor_id=contributor_id)
+    sql = sql.format(contributor_id=contributor_id)
     if request_id:
         sql += 'AND id={request_id}'.format(request_id=request_id)
     with get_conn() as conn:

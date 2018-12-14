@@ -61,7 +61,7 @@ def show_nr():
             if value == 'reject':
                 rejected_ids.append(key)
         contributor_model.respond_nr(user_id, accepted_ids, rejected_ids)
-    table=contributor_model.show_nr(user_id, request_id)
+    table=contributor_model.show_nr(request_id, user_id)
     return load_template('contributor/new-requests.html', title='New Requests',
      table=table, col_names=col_names)
 
