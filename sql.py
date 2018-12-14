@@ -31,4 +31,4 @@ with get_conn() as conn:
     cursor = conn.cursor()
     with open('tables.sql') as file:
         for command in file.read().split('GO'):
-cursor.execute(command)
+            cursor.execute(command)

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} · iEgypt</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='content/bootstrap.min.css')}}"/>
+</head>
+
+<body>
+  <header class="navbar navbar-expand flex-column flex-md-row">
+    <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="iEgypt">iEgypt</a>
+    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+      {% if logged_in %}
+      <li class="nav-item">
+        <a class="nav-link p-2" href="{{ url_for('user.home') }}" aria-label="Home">Home</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link p-2" href="{{ url_for('user.show_profile') }}" aria-label="Profile">Profile</a>
+      </li>
+
+      <li class="nav-item">
+      <a class="nav-link p-2" href="{{ url_for('user.logout') }}" aria-label="Logout">Logout</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+      <a class="nav-link p-2" href="{{ url_for('user.login') }}" aria-label="Login">Login</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link p-2" href="{{ url_for('user.register') }}" aria-label="Register">Register</a>
+    </li>
+    {%endif%}
+  </ul>
+  </header>
+
+  <div class="container-fluid">
+    {% block content %}{% endblock %}
+    {% for message in get_flashed_messages()%}
+    <div class="flash">
+      {{ message }}
+    </div>
+    {% endfor %}
+    <hr />
+    </div>
+    <script src="{{url_for('static', filename='scripts/bootstrap.js')}}"></script>
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>

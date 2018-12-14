@@ -61,7 +61,7 @@ def show_nr():
             if value == 'reject':
                 rejected_ids.append(key)
         contributor_model.respond_nr(user_id, accepted_ids, rejected_ids)
-    table=contributor_model.show_nr(userid, request_id)
+    table=contributor_model.show_nr(user_id, request_id)
     return load_template('contributor/new-requests.html', title='New Requests',
      table=table, col_names=col_names)
 
@@ -74,3 +74,27 @@ def show_events():
     table=contributor_model.show_events()
     return load_template('contributor/show-events.html', title= 'Show Events',
      table=table, col_names=col_names)
+
+
+@bp.route('/send-msg')
+@login_required
+def send_msg():
+    return load_template('contributor/send-msg.html', title= 'Send Message')
+
+
+@bp.route('/recieve-msg')
+@login_required
+def rec_msg():
+    return load_template('contributor/rec-msg.html', title= 'Recieve Message')
+
+
+@bp.route('/show-notifications')
+@login_required
+def show_notif():
+    return load_template('contributor/show-notifications.html', title= 'Show Notifications')
+
+
+@bp.route('/delete-oc')
+@login_required
+def delete_oc():
+    return delete_oc('contributor/delete-oc.html', title= 'Delete Original Content')
